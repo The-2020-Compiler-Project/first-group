@@ -1,0 +1,935 @@
+#include "compile.h"
+void autoinit()
+{
+    for(int hh=0;hh<18;hh++)//状态转移方程初始化
+    {
+        for(int kk=0;kk<256;kk++)
+            chart[hh][kk]=0;
+    }
+    for(int hh=65;hh<=90;hh++)
+    {
+        chart[1][hh]=2;
+        chart[2][hh]=2;
+    }
+    for(int hh=97;hh<=122;hh++)
+    {
+        chart[1][hh]=2;
+        chart[2][hh]=2;
+    }
+    for(int hh=48;hh<=57;hh++)
+    {
+        chart[1][hh]=3;
+        chart[2][hh]=2;
+        chart[3][hh]=3;
+        chart[4][hh]=5;
+        chart[5][hh]=5;
+    }
+    chart[3][46]=4;
+    chart[1]['<']=6;
+    chart[6]['<']=7;
+    chart[1]['>']=8;
+    chart[8]['>']=9;
+    chart[1]['/']=10;
+    chart[10]['/']=11;
+    chart[6]['=']=12;
+    chart[8]['=']=13;
+    chart[1]['=']=14;
+    chart[14]['=']=15;
+}
+int judgeB(string str)
+{
+    for(int i=0;i<str.size();i++)
+    {
+        if(BT[i].value==str)
+            return 1;
+    }
+    return 0;
+}
+int automaton(string strline,int i,vector<token> &token1)
+{
+    string strline1="";
+    int kk1=1,kk2=1,j;
+    for(j=i;i<strline.size();j++)
+    {
+        kk1=kk2;
+        kk2=chart[kk1][strline[j]];
+        if(kk2==0)
+            break;
+        strline1+=strline[j];
+    }
+    switch(kk1)
+    {
+        case 2:
+        {
+            if(keyword.find(strline1)!=keyword.end())
+            {
+                token token2;
+                token2.type='G';
+                token2.value=strline1;
+                token1.push_back(token2);
+                GT.push_back(token2);
+            }
+            else
+            {
+                token token2;
+                token2.type='B';
+                token2.value=strline1;
+                token1.push_back(token2);
+                BT.push_back(token2);              
+            }
+            break;   
+        }
+        case 3:
+        {
+            token token2;
+            token2.type='C';
+            token2.value=strline1;
+            token1.push_back(token2);
+            CT.push_back(token2);
+            break;
+        }
+        case 5:
+        {
+            token token2;
+            token2.type='C';
+            token2.value=strline1;
+            token1.push_back(token2);
+            CT.push_back(token2);
+            break;
+        }
+        case 6:
+        {
+            token token2;
+            token2.type='J';
+            token2.value=strline1;
+            token1.push_back(token2);
+            JT.push_back(token2);
+            break;
+        }
+        case 7:
+        {
+            token token2;
+            token2.type='J';
+            token2.value=strline1;
+            token1.push_back(token2);
+            JT.push_back(token2);
+            break;
+        }
+        case 8:
+        {
+            token token2;
+            token2.type='J';
+            token2.value=strline1;
+            token1.push_back(token2);
+            JT.push_back(token2);
+            break;
+        }
+        case 9:
+        {
+            token token2;
+            token2.type='J';
+            token2.value=strline1;
+            token1.push_back(token2);
+            JT.push_back(token2);
+            break;
+        }
+        case 11:
+        {
+            j=strline.size();
+            break;
+        }
+        case 13:
+        {
+            token token2;
+            token2.type='J';
+            token2.value=strline1;
+            token1.push_back(token2);
+            JT.push_back(token2);
+            break;
+        }
+        case 14:
+        {
+            token token2;
+            token2.type='J';
+            token2.value=strline1;
+            token1.push_back(token2);
+            JT.push_back(token2);
+            break;
+        }
+        case 15:
+        {
+            token token2;
+            token2.type='J';
+            token2.value=strline1;
+            token1.push_back(token2);
+            JT.push_back(token2);
+            break;
+        }
+        default://其余态报错
+        {
+            cout<<"出现错误";
+        }
+    }
+    j--;
+    return j;
+}
+void dotoken(char *filename)
+{
+    totalrow=0;
+    ifstream file;
+    file.open(filename,ios::in);
+    if(!file.is_open())
+        return ;
+    string strline;
+    while(getline(file,strline))
+    {
+        totalrow++;
+        cout<<strline<<endl;
+        vector<token> token1;//包含整行的token
+        int i;
+        strline+='@';
+        for(i=0;i<strline.size();i++)
+        {
+            if(strline[i]==' ')
+                continue;
+            else if(strline[i]=='#')
+                break;
+            else if(strline[i]=='@')
+                break;
+            else if(strline[i]=='\'')
+            {
+                i++;
+                token token2;//某个token
+                token2.type='c';
+                token2.value=strline[i];
+                token1.push_back(token2);
+                cT.push_back(token2);
+                i++;
+                if(strline[i]!='\'')
+                    cout<<"error";
+            }
+            else if(strline[i]=='\"')
+            {
+                i++;
+                int k;
+                string strline2="";
+                for(k=i;k<strline.size();k++)
+                {
+                    if(strline[k]=='\"')
+                        break;
+                    else if(strline[k]=='@')
+                    {
+                        cout<<"error";
+                        break;
+                    }
+                    else
+                    {   
+                        strline2+=strline[k];
+                    }
+                }
+                i=k;
+                token token2;//某个token
+                token2.type='S';
+                token2.value=strline2;
+                token1.push_back(token2);
+                ST.push_back(token2);
+            }
+            else if(mark.find(strline[i])!=mark.end())
+            {
+                token token2;//某个token
+                token2.type='J';
+                token2.value=strline[i];
+                token1.push_back(token2);
+                JT.push_back(token2);
+            }
+            else
+            {
+                int j=automaton(strline,i,token1);
+                i=j;
+            }
+        }
+        all.push_back(token1);
+    }
+    file.close();
+}
+void readin()
+{
+    memset(table,-1,sizeof(table));
+    Getnu["#"]=0;
+    Getch[0]="#";
+    ifstream fp;
+    fp.open("zhongjie.txt");
+    if(!fp.is_open()) 
+    {
+        cout<<"error"<<endl;
+        return;
+    }
+    string x;
+        do{
+           fp>>x;
+            Getnu[x]=++num;
+            Getch[num]=x;
+        }while(!fp.eof());
+    fp.close();
+    numvt=++num;
+    Getnu["@"]=numvt;       
+    Getch[num]=("@");
+    fp.open("nozhongjie.txt");
+    if(!fp.is_open()) 
+    {
+        cout<<"error"<<endl;
+        return;
+    }
+        do{
+            fp>>x;
+            Getnu[x]=++num;
+            Getch[num]=x;
+        }while(!fp.eof());
+    fp.close();
+    fp.open("chanshengshi.txt");
+    if(!fp.is_open()) 
+    {
+        cout<<"error"<<endl;
+        return;
+    }
+    string pro,head,ss,dd;//head为开头非终结符(单词)，pro为表达式的一个单词，ss为整个表达式，表达式由|分开
+    ss.clear();
+    dd.clear();
+        while(fp>>head && head!="end")//读取开头的非终结符(单词)连带后面的多个产生式
+        {
+            dd.clear();
+            ss=head;
+            fp>>pro;//除去->
+            do{
+                fp>>pro;
+                if(pro == "|")
+                {
+                    Process.push_back(ss);
+                    Production.push_back(dd);
+                    dd.clear();
+                    ss.clear();
+                    ss=head;
+                }
+                else
+                {
+                    ss=ss+" "+pro;
+                    if(dd=="") dd+=pro;
+                    else dd=dd+" "+pro;
+                }
+            }while(fp.peek()!='\n');
+            Production.push_back(dd);
+            Process.push_back(ss);
+        }
+}
+
+string Gainfirst(string sb)//获取process的非终结符首
+{
+    string ss;
+    int i=0;
+    while(sb[i]!=' ')
+    {
+        ss+=sb[i];
+        i++;
+    }
+    return ss;
+}
+
+string Gainsecond(string sb)//获取process的右式首词
+{
+    string ss;
+    int i=0;
+    while(sb[i++]!=' ') {}
+    while(sb[i]!=' ' && i<sb.size())
+    {
+        ss+=sb[i];
+        i++;
+    }
+    return ss;
+}
+
+void Intersection(string &a,string b) //取a,b交集赋值给a
+{
+    set<char>SETE;
+    for(int i=0;i<a.size();i++) SETE.insert(a[i]);
+    for(int i=0;i<b.size();i++) SETE.insert(b[i]);
+    string SS;
+    set<char>::iterator I;
+    for(I=SETE.begin();I!=SETE.end();I++) SS+=*I;
+    a=SS;
+}
+
+string Getf(int v,int & H0)//求first集时首尾情况考虑
+{
+    if(v==numvt)
+    {
+        H0=1;
+    }
+    if(v<numvt) return first[v];
+    string SS;
+        for(int i=0;i<Process.size();i++)
+        {
+            if(Getnu[Gainfirst(Process[i])]==v) 
+            {
+                string Second;
+                int t=0;
+                while(Process[i][t]!=' ') ++t;
+                ++t;
+                while(Process[i][t]!=' ' && t!=Process[i].size())
+                {
+                    Second+=Process[i][t];
+                    ++t;
+                }
+                SS+=Getf(Getnu[Second],H0);
+            }
+        }
+    return  SS;
+}
+
+void Getfirst()//得到first集
+{
+    for(int i=1;i<=numvt;i++)
+    {
+         first[i]+=('0'+i);//非终结符事先加上‘0’的ascii码
+    }
+    for(int j=0;j<Process.size();j++)
+    {
+        int k=0;int H0=0;
+        while(Process[j][k]!=' ') k++;//跳过第一个终结符记录
+            do{
+                H0=0;
+                k++;
+                    if(k>=Process[j].size())  
+                    {
+                        first[Getnu[Gainfirst(Process[j])]]+=('0'+numvt);
+                        break;
+                    }
+                string ss;
+                while(Process[j][k]!=' ')
+                {
+                    ss+=Process[j][k];
+                    k++;
+                    if(k>=Process[j].size())
+                    {
+                        Intersection(first[Getnu[Gainfirst(Process[j])]],Getf(Getnu[ss],H0));
+                        break;
+                    }
+                }
+                Intersection(first[Getnu[Gainfirst(Process[j])]],Getf(Getnu[ss],H0));
+                ss.clear();
+            }while(H0);
+    }
+}
+
+void Printfirst()//打印first集
+{
+    cout<<"first集:"<<endl;
+    for(int i=1;i<=num;i++)
+    {
+        cout<<"first ["<<Getch[i]<<"]: ";
+        for(int j=0;j<first[i].size();j++) cout<<Getch[first[i][j]-'0']<<" ";
+        cout<<endl;
+    }
+    cout<<endl;
+}
+
+void Getfollow()//得到follow集
+{
+    Intersection(follow[Getnu[Gainfirst(Process[0])]],"0");//首个加入#
+    for(int j=0;j<Process.size();j++)
+    {
+        int jj=0;
+        while(Process[j][jj++]!=' '){}//跳过左式终结符
+        for(;jj<Process[j].size();jj++)
+        {
+            string ss,hehe;
+            while(Process[j][jj]!=' ' && jj<Process[j].size())
+            {
+                ss+=Process[j][jj];
+                jj++;
+            }
+            if(Getnu[ss]<=numvt)
+            {
+                ss.clear();
+                continue;
+            }
+            int k=jj; 
+            int H0;
+            do
+            {
+                hehe.clear();
+                H0=0;
+                k++;
+                if(k>=Process[j].size())
+                {
+                    Intersection(follow[Getnu[ss]],follow[Getnu[Gainfirst(Process[j])]]);
+                    break;
+                }
+                while(Process[j][k]!=' ')
+                {
+                    hehe+=Process[j][k];
+                    k++;
+                    if(k>=Process[j].size())
+                    {
+                        break;
+                    }
+                }
+                Intersection(follow[Getnu[ss]],Getf(Getnu[hehe],H0));
+            }while(H0);
+        }
+    }
+}
+
+void Printfollow()//打印follow集
+{
+    cout<<"follow集："<<endl;
+    for(int i=numvt+1;i<=num;i++)
+    {
+        cout<<"follow ["<<Getch[i]<<"]: ";
+        for(int j=0;j<follow[i].size();j++) cout<<Getch[follow[i][j]-'0']<<" ";
+        cout<<endl;
+    }
+    cout<<endl;
+}
+
+void Gettable()
+{
+    for(int i=0;i<Process.size();i++)
+    {
+        if(Gainsecond(Process[i])=="@")
+        {
+            string Follow=follow[Getnu[Gainfirst(Process[i])]];
+            for(int k=0;k<Follow.size();k++)
+            {
+                table[Getnu[Gainfirst(Process[i])]][Follow[k]-'0']=i;
+            }
+        }
+        string temp=first[Getnu[Gainsecond(Process[i])]];
+        for(int j=0;j<temp.size();j++)
+        {
+            if(temp[j]!=(numvt+'0'))
+            {
+                table[Getnu[Gainfirst(Process[i])]][temp[j]-'0']=i;
+            }
+            else
+            {
+                string Follow=follow[Getnu[Gainsecond(Process[i])]];
+                for(int k=0;k<Follow.size();k++)
+                {
+                    table[Getnu[Gainfirst(Process[i])]][Follow[k]-'0']=i;
+                }
+            }
+        }
+    }
+}
+
+string Getp(int i)
+{
+    string ss;
+    ss=to_string(i);
+    return ss;
+}
+
+void PrintT()
+{
+    cout<<"预测分析表："<<endl;
+    string ss;
+    int t;
+    cout<<left<<setw(12)<<" ";
+    for(int i=0;i<numvt;i++)
+        {
+            ss=Getch[i];
+            t=ss.size();
+            cout<<left<<setw(t+2)<<ss;
+        }
+        cout<<endl;
+    for(int i=numvt+1;i<=num;i++)
+    {
+        cout<<left<<setw(12)<<Getch[i];
+        for(int j=0;j<numvt;j++)
+        {
+            ss=Getch[j];
+            t=ss.size();
+            cout<<left<<setw(t+2)<<Getp(table[i][j]);
+        }
+        cout<<endl;
+    }
+    cout<<endl;
+}
+void initProcess()
+{
+    ifstream file;
+    char* filename="chanshengshi1.txt";
+    file.open(filename,ios::in);
+    if(!file.is_open())
+        return ;
+    string strline;
+    while(getline(file,strline))
+    {
+        process1.push_back(strline);
+    }
+}
+void createfour(char ch)
+{
+    if(ch=='A')
+    {
+        optstack.push(backtoken.top());
+    }
+    else if(ch=='B')
+    {
+        fourarray fourarray1;
+        fourarray1.name1.type='J';
+        fourarray1.name1.value="*";
+        token token2;
+        token2=optstack.top();
+        optstack.pop();
+        fourarray1.name3=token2;
+        token2=optstack.top();
+        optstack.pop();
+        fourarray1.name2=token2;
+        fourarray1.name4.type='B';
+        fourarray1.name4.value="t"+to_string(nowuse);
+        optstack.push(fourarray1.name4);
+        nowuse++;
+        chararray.push_back(fourarray1);
+    }
+    else if(ch=='C')
+    {
+        fourarray fourarray1;
+        fourarray1.name1.type='J';
+        fourarray1.name1.value="/";
+        token token2;
+        token2=optstack.top();
+        optstack.pop();
+        fourarray1.name3=token2;
+        token2=optstack.top();
+        optstack.pop();
+        fourarray1.name2=token2;
+        fourarray1.name4.type='B';
+        fourarray1.name4.value="t"+to_string(nowuse);
+        optstack.push(fourarray1.name4);
+        nowuse++;
+        chararray.push_back(fourarray1);
+    }
+    else if(ch=='D')
+    {
+        fourarray fourarray1;
+        fourarray1.name1.type='J';
+        fourarray1.name1.value="+";
+        token token2;
+        token2=optstack.top();
+        optstack.pop();
+        fourarray1.name3=token2;
+        token2=optstack.top();
+        optstack.pop();
+        fourarray1.name2=token2;
+        fourarray1.name4.type='B';
+        fourarray1.name4.value="t"+to_string(nowuse);
+        optstack.push(fourarray1.name4);
+        nowuse++;
+        chararray.push_back(fourarray1);
+    }
+    else if(ch=='E')
+    {
+        fourarray fourarray1;
+        fourarray1.name1.type='J';
+        fourarray1.name1.value="-";
+        token token2;
+        token2=optstack.top();
+        optstack.pop();
+        fourarray1.name3=token2;
+        token2=optstack.top();
+        optstack.pop();
+        fourarray1.name2=token2;
+        fourarray1.name4.type='B';
+        fourarray1.name4.value="t"+to_string(nowuse);
+        optstack.push(fourarray1.name4);
+        nowuse++;
+        chararray.push_back(fourarray1);
+    
+    }
+    else if(ch=='F')
+    {
+        fourarray fourarray1;
+        fourarray1.name1.type='J';
+        fourarray1.name1.value="=";
+        token token2;
+        token2=optstack.top();
+        optstack.pop();
+        fourarray1.name2=token2;
+        token2=optstack.top();
+        optstack.pop();
+        fourarray1.name4=token2;
+        fourarray1.name3.type='J';
+        fourarray1.name3.value="_";
+        chararray.push_back(fourarray1);
+    }
+    else if(ch=='G')
+    {
+        fourarray fourarray1;
+        fourarray1.name1.type='G';
+        fourarray1.name1.value="if";
+        token token2;
+        token2=optstack.top();
+        optstack.pop();
+        fourarray1.name2=token2;
+        fourarray1.name3.type='J';
+        fourarray1.name3.value="_";
+        fourarray1.name4.type='J';
+        fourarray1.name4.value="_";
+        chararray.push_back(fourarray1);
+    }
+    else if(ch=='H')
+    {
+        fourarray fourarray1;
+        fourarray1.name1.type='G';
+        fourarray1.name1.value="else";
+        fourarray1.name2.type='J';
+        fourarray1.name2.value="_";
+        fourarray1.name3.type='J';
+        fourarray1.name3.value="_";
+        fourarray1.name4.type='J';
+        fourarray1.name4.value="_";
+        chararray.push_back(fourarray1);
+    }
+    else if(ch=='I')
+    {
+        fourarray fourarray1;
+        fourarray1.name1.type='G';
+        fourarray1.name1.value="end";
+        fourarray1.name2.type='J';
+        fourarray1.name2.value="_";
+        fourarray1.name3.type='J';
+        fourarray1.name3.value="_";
+        fourarray1.name4.type='J';
+        fourarray1.name4.value="_";
+        chararray.push_back(fourarray1);
+    }
+    else if(ch=='J')
+    {
+        fourarray fourarray1;
+        fourarray1.name1.type='G';
+        fourarray1.name1.value="while";
+        fourarray1.name2.type='J';
+        fourarray1.name2.value="_";
+        fourarray1.name3.type='J';
+        fourarray1.name3.value="_";
+        fourarray1.name4.type='J';
+        fourarray1.name4.value="_";
+        chararray.push_back(fourarray1);
+    }
+    else if(ch=='K')
+    {
+        fourarray fourarray1;
+        fourarray1.name1.type='G';
+        fourarray1.name1.value="do";
+        token token2;
+        token2=optstack.top();
+        optstack.pop();
+        fourarray1.name2=token2;
+        fourarray1.name3.type='J';
+        fourarray1.name3.value="_";
+        fourarray1.name4.type='J';
+        fourarray1.name4.value="_";
+        chararray.push_back(fourarray1);
+    }
+    else if(ch=='L')
+    {
+        fourarray fourarray1;
+        fourarray1.name1.type='G';
+        fourarray1.name1.value="end";
+        fourarray1.name2.type='J';
+        fourarray1.name2.value="_";
+        fourarray1.name3.type='J';
+        fourarray1.name3.value="_";
+        fourarray1.name4.type='J';
+        fourarray1.name4.value="_";
+        chararray.push_back(fourarray1);
+    }
+    else if(ch=='M')
+    {
+        fourarray fourarray1;
+        fourarray1.name1.type='G';
+        fourarray1.name1.value="cout";
+        fourarray1.name2.type='J';
+        fourarray1.name2.value="_";
+        fourarray1.name3.type='J';
+        fourarray1.name3.value="_";
+        token token2;
+        token2=backtoken.top();
+        fourarray1.name4=token2;
+        chararray.push_back(fourarray1);
+    }
+    else if(ch=='N')
+    {
+        fourarray fourarray1;
+        fourarray1.name1.type='G';
+        fourarray1.name1.value="cin";
+        fourarray1.name2.type='J';
+        fourarray1.name2.value="_";
+        fourarray1.name3.type='J';
+        fourarray1.name3.value="_";
+        token token2;
+        token2=backtoken.top();
+        fourarray1.name4=token2;
+        chararray.push_back(fourarray1);
+    }
+    else if(ch=='O'||ch=='P'||ch=='Q'||ch=='R'||ch=='S')
+    {
+        optcharstack.push(backtoken.top().value);
+    }
+    else if(ch=='T')
+    {
+        fourarray fourarray1;
+        token token2;
+        token2=backtoken.top();
+        backtoken.pop();
+        fourarray1.name1=token2;
+        token2=optstack.top();
+        optstack.pop();
+        fourarray1.name3=token2;
+        token2=optstack.top();
+        optstack.pop();
+        fourarray1.name2=token2;
+        token2.type='B';
+        token2.value="t"+to_string(nowuse);
+        nowuse++;
+        fourarray1.name4=token2;
+        chararray.push_back(fourarray1);
+        optstack.push(token2);
+    }
+}
+void reseveread(string x)
+{
+    vector<string> nihao;
+    string xx="";
+    for(int i=0;i<x.size();i++)
+    {
+        if(x[i]==' ')
+        {
+            nihao.push_back(xx);
+            xx="";
+        }   
+        else
+        {
+            xx=xx+x[i];
+        }
+    }
+    nihao.push_back(xx);
+    for(int i=nihao.size()-1;i>=0;i--)
+    {
+        semantictoken.push(nihao[i]);
+    }
+}
+bool iszchar(string token2)
+{
+    if(token2[0]<='Z'&&token2[0]>='A')
+        return false;
+    else
+    {
+        return true;
+    }
+}
+string returntype(token token2)
+{
+    if(token2.type=='B')
+        return "id";
+    else if(token2.type=='C')
+        return "number";
+    else if(token2.type=='c')
+        return "ch";
+    else
+    {
+        return token2.value;
+    }
+}
+void printfour()
+{
+    for(int i=0;i<chararray.size();i++)
+    {
+        cout<<chararray[i].name1.value<<"    "<<chararray[i].name2.value<<"    "<<chararray[i].name3.value<<"    "<<chararray[i].name4.value<<endl;
+    }
+}
+void semantic_analysis()
+{
+    semantictoken.push("Funcdef");
+    token token2;
+    token2.type='J';
+    token2.value="@";
+    vector<token> ALL;
+    for(int i=0;i<all.size();i++)
+    {
+        for(int j=0;j<all[i].size();j++)
+        {
+            ALL.push_back(all[i][j]);
+        }
+    }
+    ALL.push_back(token2);
+    int num=0;
+    while(num<ALL.size())
+    {
+        string str1;
+        str1=semantictoken.top();
+        semantictoken.pop();
+        cout<<str1<<"  "<<ALL[num].value<<endl;
+        if(str1.size()==1&&str1[0]<='Z'&&str1[0]>='A')
+        {
+            createfour(str1[0]);
+        }
+        else
+        {
+            if(iszchar(str1))
+            {
+                if(str1==returntype(ALL[num]))
+                {
+                    backtoken.push(ALL[num]);
+                    num++;
+                }
+                else
+                {
+                    cout<<"错误";
+                    system("pause");
+                    return ;
+                }
+            }
+            else
+            {
+                int i=table[Getnu[str1]][Getnu[returntype(ALL[num])]];
+                if(i==-1)
+                {
+                    cout<<"错误";
+                    system("pause");
+                    return ;
+                }
+                else
+                {
+                    if(process1[i]=="@")
+                        continue;
+                    reseveread(process1[i]);
+                }   
+            }
+            if(num==ALL.size()-1)
+            {
+                break;
+            }
+        }
+    }
+}
+int main()
+{
+    char* filepath="error.txt";
+    autoinit();
+    dotoken(filepath);
+    readin();
+    Getfirst();
+    int n=20;
+    while(n--)
+    {
+        Getfollow();
+    }
+    Gettable();
+    initProcess();
+    semantic_analysis();
+    printfour();
+    system("pause");
+    return 0;
+}

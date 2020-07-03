@@ -1,0 +1,354 @@
+#include "compile.h"
+struct fourarray
+{
+    token name1,name2,name3,name4;//四元式
+};
+vector<fourarray> chararray;//四元式序列
+stack<token> backtoken,optstack;//    操作数栈
+stack<string> optcharstack,semantictoken;//操作符栈 语义栈
+int nowuse=0;
+void createfour(char ch)
+{
+    if(ch=='A')
+    {
+        optstack.push(backtoken.top());
+    }
+    else if(ch=='B')
+    {
+        fourarray fourarray1;
+        fourarray1.name1.type='J';
+        fourarray1.name1.value="*";
+        token token2;
+        token2=optstack.top();
+        optstack.pop();
+        fourarray1.name3=token2;
+        token2=optstack.top();
+        optstack.pop();
+        fourarray1.name2=token2;
+        fourarray1.name4.type='B';
+        fourarray1.name4.value="t"+to_string(nowuse);
+        optstack.push(fourarray1.name4);
+        nowuse++;
+        chararray.push_back(fourarray1);
+    }
+    else if(ch=='C')
+    {
+        fourarray fourarray1;
+        fourarray1.name1.type='J';
+        fourarray1.name1.value="/";
+        token token2;
+        token2=optstack.top();
+        optstack.pop();
+        fourarray1.name3=token2;
+        token2=optstack.top();
+        optstack.pop();
+        fourarray1.name2=token2;
+        fourarray1.name4.type='B';
+        fourarray1.name4.value="t"+to_string(nowuse);
+        optstack.push(fourarray1.name4);
+        nowuse++;
+        chararray.push_back(fourarray1);
+    }
+    else if(ch=='D')
+    {
+        fourarray fourarray1;
+        fourarray1.name1.type='J';
+        fourarray1.name1.value="+";
+        token token2;
+        token2=optstack.top();
+        optstack.pop();
+        fourarray1.name3=token2;
+        token2=optstack.top();
+        optstack.pop();
+        fourarray1.name2=token2;
+        fourarray1.name4.type='B';
+        fourarray1.name4.value="t"+to_string(nowuse);
+        optstack.push(fourarray1.name4);
+        nowuse++;
+        chararray.push_back(fourarray1);
+    }
+    else if(ch=='E')
+    {
+        fourarray fourarray1;
+        fourarray1.name1.type='J';
+        fourarray1.name1.value="-";
+        token token2;
+        token2=optstack.top();
+        optstack.pop();
+        fourarray1.name3=token2;
+        token2=optstack.top();
+        optstack.pop();
+        fourarray1.name2=token2;
+        fourarray1.name4.type='B';
+        fourarray1.name4.value="t"+to_string(nowuse);
+        optstack.push(fourarray1.name4);
+        nowuse++;
+        chararray.push_back(fourarray1);
+    
+    }
+    else if(ch=='F')
+    {
+        fourarray fourarray1;
+        fourarray1.name1.type='J';
+        fourarray1.name1.value="=";
+        token token2;
+        token2=optstack.top();
+        optstack.pop();
+        fourarray1.name2=token2;
+        token2=optstack.top();
+        optstack.pop();
+        fourarray1.name4=token2;
+        fourarray1.name3.type='J';
+        fourarray1.name3.value="_";
+        chararray.push_back(fourarray1);
+    }
+    else if(ch=='G')
+    {
+        fourarray fourarray1;
+        fourarray1.name1.type='G';
+        fourarray1.name1.value="if";
+        token token2;
+        token2=optstack.top();
+        optstack.pop();
+        fourarray1.name2=token2;
+        fourarray1.name3.type='J';
+        fourarray1.name3.value="_";
+        fourarray1.name4.type='J';
+        fourarray1.name4.value="_";
+        chararray.push_back(fourarray1);
+    }
+    else if(ch=='H')
+    {
+        fourarray fourarray1;
+        fourarray1.name1.type='G';
+        fourarray1.name1.value="else";
+        fourarray1.name2.type='J';
+        fourarray1.name2.value="_";
+        fourarray1.name3.type='J';
+        fourarray1.name3.value="_";
+        fourarray1.name4.type='J';
+        fourarray1.name4.value="_";
+        chararray.push_back(fourarray1);
+    }
+    else if(ch=='I')
+    {
+        fourarray fourarray1;
+        fourarray1.name1.type='G';
+        fourarray1.name1.value="end";
+        fourarray1.name2.type='J';
+        fourarray1.name2.value="_";
+        fourarray1.name3.type='J';
+        fourarray1.name3.value="_";
+        fourarray1.name4.type='J';
+        fourarray1.name4.value="_";
+        chararray.push_back(fourarray1);
+    }
+    else if(ch=='J')
+    {
+        fourarray fourarray1;
+        fourarray1.name1.type='G';
+        fourarray1.name1.value="while";
+        fourarray1.name2.type='J';
+        fourarray1.name2.value="_";
+        fourarray1.name3.type='J';
+        fourarray1.name3.value="_";
+        fourarray1.name4.type='J';
+        fourarray1.name4.value="_";
+        chararray.push_back(fourarray1);
+    }
+    else if(ch=='K')
+    {
+        fourarray fourarray1;
+        fourarray1.name1.type='G';
+        fourarray1.name1.value="do";
+        token token2;
+        token2=optstack.top();
+        optstack.pop();
+        fourarray1.name2=token2;
+        fourarray1.name3.type='J';
+        fourarray1.name3.value="_";
+        fourarray1.name4.type='J';
+        fourarray1.name4.value="_";
+        chararray.push_back(fourarray1);
+    }
+    else if(ch=='L')
+    {
+        fourarray fourarray1;
+        fourarray1.name1.type='G';
+        fourarray1.name1.value="end";
+        fourarray1.name2.type='J';
+        fourarray1.name2.value="_";
+        fourarray1.name3.type='J';
+        fourarray1.name3.value="_";
+        fourarray1.name4.type='J';
+        fourarray1.name4.value="_";
+        chararray.push_back(fourarray1);
+    }
+    else if(ch=='M')
+    {
+        fourarray fourarray1;
+        fourarray1.name1.type='G';
+        fourarray1.name1.value="cout";
+        fourarray1.name2.type='J';
+        fourarray1.name2.value="_";
+        fourarray1.name3.type='J';
+        fourarray1.name3.value="_";
+        token token2;
+        token2=backtoken.top();
+        fourarray1.name4=token2;
+        chararray.push_back(fourarray1);
+    }
+    else if(ch=='N')
+    {
+        fourarray fourarray1;
+        fourarray1.name1.type='G';
+        fourarray1.name1.value="cin";
+        fourarray1.name2.type='J';
+        fourarray1.name2.value="_";
+        fourarray1.name3.type='J';
+        fourarray1.name3.value="_";
+        token token2;
+        token2=backtoken.top();
+        fourarray1.name4=token2;
+        chararray.push_back(fourarray1);
+    }
+    else if(ch=='O'||ch=='P'||ch=='Q'||ch=='R'||ch=='S')
+    {
+        optcharstack.push(backtoken.top().value);
+    }
+    else if(ch=='T')
+    {
+        fourarray fourarray1;
+        token token2;
+        token2=backtoken.top();
+        backtoken.pop();
+        fourarray1.name1=token2;
+        token2=optstack.top();
+        optstack.pop();
+        fourarray1.name3=token2;
+        token2=optstack.top();
+        optstack.pop();
+        fourarray1.name2=token2;
+        token2.type='B';
+        token2.value="t"+to_string(nowuse);
+        nowuse++;
+        fourarray1.name4=token2;
+        chararray.push_back(fourarray1);
+        optstack.push(token2);
+    }
+}
+void reseveread(string x)
+{
+    vector<string> nihao;
+    string xx="";
+    for(int i=0;i<x.size();i++)
+    {
+        if(x[i]==' ')
+        {
+            nihao.push_back(xx);
+            xx="";
+        }   
+        else
+        {
+            xx=xx+x[i];
+        }
+    }
+    nihao.push_back(xx);
+    for(int i=nihao.size()-1;i>=0;i--)
+    {
+        semantictoken.push(nihao[i]);
+    }
+}
+bool iszchar(string token2)
+{
+    if(token2[0]<='Z'&&token2[0]>='A')
+        return false;
+    else
+    {
+        return true;
+    }
+}
+string returntype(token token2)
+{
+    if(token2.type=='B')
+        return "id";
+    else if(token2.type=='C')
+        return "number";
+    else if(token2.type=='c')
+        return "ch";
+    else
+    {
+        return token2.value;
+    }
+}
+void printfour()
+{
+    for(int i=0;i<chararray.size();i++)
+    {
+        cout<<chararray[i].name1.value<<"    "<<chararray[i].name2.value<<"    "<<chararray[i].name3.value<<"    "<<chararray[i].name4.value<<endl;
+    }
+}
+void semantic_analysis()
+{
+    semantictoken.push("Funcdef");
+    token token2;
+    token2.type='J';
+    token2.value="@";
+    vector<token> ALL;
+    for(int i=0;i<all.size();i++)
+    {
+        for(int j=0;j<all[i].size();j++)
+        {
+            ALL.push_back(all[i][j]);
+        }
+    }
+    ALL.push_back(token2);
+    int num=0;
+    while(num<ALL.size())
+    {
+        string str1;
+        str1=semantictoken.top();
+        semantictoken.pop();
+        if(str1.size()==1&&str1[0]<='Z'&&str1[0]>='A')
+        {
+            createfour(str1[0]);
+        }
+        else
+        {
+            if(iszchar(str1))
+            {
+                if(str1==returntype(ALL[num]))
+                {
+                    backtoken.push(ALL[num]);
+                    num++;
+                }
+                else
+                {
+                    cout<<"错误";
+                    system("pause");
+                    return ;
+                }
+            }
+            else
+            {
+                int i=table[Getnu[str1]][returntype(ALL[num])];
+                if(i==-1)
+                {
+                    cout<<"错误";
+                    system("pause");
+                    return ;
+                }
+                else
+                {
+                    if(process1[i]=="@")
+                        continue;
+                    reseveread(process1[i]);
+                }   
+            }
+            if(num==ALL.size()-1)
+            {
+                break;
+            }
+        }
+    }
+}
