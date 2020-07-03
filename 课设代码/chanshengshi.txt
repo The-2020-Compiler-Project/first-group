@@ -7,7 +7,7 @@ Faccycle -> * Factor Faccycle | / Factor Faccycle | @
 Item -> + Divi Item | - Divi Item | @
 Parastate -> State Stateclo | @
 State -> Type id Init | id Init
-Init -> = Rvalue | @
+Init -> = Rvalue | [ number ] | @
 Rvalue -> Exp
 Stateclo -> , State Stateclo | @
 Funcblock -> Staclo ; Funcbloclo

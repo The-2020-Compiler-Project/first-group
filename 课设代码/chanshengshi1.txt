@@ -22,6 +22,7 @@ State Stateclo
 Type id A Init
 id A Init
 = Rvalue F
+[ number ]
 @
 Exp
 , State Stateclo
