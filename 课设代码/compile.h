@@ -11,23 +11,23 @@
 #include<string>
 #include<fstream>
 using namespace std;
-set<string> keyword={"int","while","cin","cout","return","if","else","float","char","void","string"};//¹Ø¼ü´Ê±í
-set<char> mark={'-','*','+','/','{','}',',',';','(',')','[',']'};//½ç·û±í
+set<string> keyword={"int","while","cin","cout","return","if","else","float","char","void","string"};//å…³é”®è¯è¡¨
+set<char> mark={'-','*','+','/','{','}',',',';','(',')','[',']'};//ç•Œç¬¦è¡¨
 set<string> mark1={"int","void","float","string","char"};
 struct token
 {
-    char type;//ÀàĞÍ
-    string value;//Öµ
+    char type;//ç±»å‹
+    string value;//å€¼
 };
-vector<token> GT,CT,BT,JT,ST,cT;//¹Ø¼ü×Ö±í ³£Êı±í ±êÊ¶·û±í ½ç·û±í ×Ö·û´® ×Ö·û
+vector<token> GT,CT,BT,JT,ST,cT;//å…³é”®å­—è¡¨ å¸¸æ•°è¡¨ æ ‡è¯†ç¬¦è¡¨ ç•Œç¬¦è¡¨ å­—ç¬¦ä¸² å­—ç¬¦
 
 void  autoinit();
 int  automaton(string strline, int i, vector<token> &token1);
 void  dotoken();
 char *filename;
 vector<vector<token>> all;
-int totalrow;//ÎÄ¼şµÄĞĞÊı
-int chart[18][256];//×´Ì¬×ªÒÆ±í
+int totalrow;//æ–‡ä»¶çš„è¡Œæ•°
+int chart[18][256];//çŠ¶æ€è½¬ç§»è¡¨
 void readin();
 void Intersection(string &a,string b);
 string Getf(int v,int & H0);
@@ -39,13 +39,13 @@ void Gettable();
 string Getp(int i);
 void PrintT();
 
-map<string,int> Getnu;//ÓÃ±êºÅ¼ÇÂ¼Ã¿¸ö·ÇÖÕ½á·ûºÍÖÕ½á·û
-string Getch[100];//±êºÅ¶ÔÓ¦µÄ·ÇÖÕ½á·ûºÍÖÕ½á·û
-vector<string> Process;//µ¥¸öÉú³ÉÊ½×éºÏ£¬ÀıÈçA->bAc´æ´¢ÎªA bAcÏÈ¶ÁÈ¡·ÇÖÕ½á·û£¬¿Õ¸ñ·Ö¿ª£¬ºóÃæÎª±í´ïÊ½
-vector<string> Production;//´æ´¢È¥µôÊ×µÄ·ÇÖÕ½á·û
-int table[100][100];//·ÖÎö±í
-int num=0;//ÖÕ½á·û¼ÓÉÏ·ÇÖÕ½á·ûµÄÊıÁ¿
-int numvt=0; //ÖÕ½á·ûºÍ·ÇÖÕ½á·û·Ö½çµã£¬¸Ä±êºÅ±íÊ¾µÄÊÇ¿Õ£¬ÓÃ@±íÊ¾
+map<string,int> Getnu;//ç”¨æ ‡å·è®°å½•æ¯ä¸ªéç»ˆç»“ç¬¦å’Œç»ˆç»“ç¬¦
+string Getch[100];//æ ‡å·å¯¹åº”çš„éç»ˆç»“ç¬¦å’Œç»ˆç»“ç¬¦
+vector<string> Process;//å•ä¸ªç”Ÿæˆå¼ç»„åˆï¼Œä¾‹å¦‚A->bAcå­˜å‚¨ä¸ºA bAcå…ˆè¯»å–éç»ˆç»“ç¬¦ï¼Œç©ºæ ¼åˆ†å¼€ï¼Œåé¢ä¸ºè¡¨è¾¾å¼
+vector<string> Production;//å­˜å‚¨å»æ‰é¦–çš„éç»ˆç»“ç¬¦
+int table[100][100];//åˆ†æè¡¨
+int num=0;//ç»ˆç»“ç¬¦åŠ ä¸Šéç»ˆç»“ç¬¦çš„æ•°é‡
+int numvt=0; //ç»ˆç»“ç¬¦å’Œéç»ˆç»“ç¬¦åˆ†ç•Œç‚¹ï¼Œæ”¹æ ‡å·è¡¨ç¤ºçš„æ˜¯ç©ºï¼Œç”¨@è¡¨ç¤º
 string first[100];
 string follow[200];
 string word;
@@ -53,52 +53,52 @@ vector<string> process1;
 
 struct fourarray
 {
-    token name1,name2,name3,name4;//ËÄÔªÊ½
+    token name1,name2,name3,name4;//å››å…ƒå¼
 };
-vector<fourarray> chararray;//´æ·ÅËÄÔªÊ½ĞòÁĞ
-stack<token> backtoken,optstack;//    ²Ù×÷ÊıÕ»
-stack<string> optcharstack,semantictoken;//²Ù×÷·ûÕ» ÓïÒåÕ»
+vector<fourarray> chararray;//å­˜æ”¾å››å…ƒå¼åºåˆ—
+stack<token> backtoken,optstack;//    æ“ä½œæ•°æ ˆ
+stack<string> optcharstack,semantictoken;//æ“ä½œç¬¦æ ˆ è¯­ä¹‰æ ˆ
 int nowuse=0;
 
 int level=0;
-struct charttype//±í¸ñÀàĞÍºÍÎ»ÖÃ
+struct charttype//è¡¨æ ¼ç±»å‹å’Œä½ç½®
 {
-    char type;//ÀàĞÍ
-    int point;//Î»ÖÃ
+    char type;//ç±»å‹
+    int point;//ä½ç½®
 };
-struct mainchart//Ö÷±í
+struct mainchart//ä¸»è¡¨
 {
-    string name;//Ãû×Ö
-    string type;//ÀàĞÍ
+    string name;//åå­—
+    string type;//ç±»å‹
     string cat;//
-    charttype address;//µØÖ·
+    charttype address;//åœ°å€
     int length;
 };
 mainchart mainchart1[100];
 
-struct funcchart//º¯Êı±í
+struct funcchart//å‡½æ•°è¡¨
 {
-    int level;//²ã´Î
-    int off;//Èë¿Ú
-    int fn;//²ÎÊı¸öÊı
-    mainchart para[5];//Èë¿Ú
+    int level;//å±‚æ¬¡
+    int off;//å…¥å£
+    int fn;//å‚æ•°ä¸ªæ•°
+    mainchart para[5];//å…¥å£
     int length;
 };
 funcchart funcchart1[5];
-struct vall//»î¶¯¼ÇÂ¼
+struct vall//æ´»åŠ¨è®°å½•
 {
-    string name;//Ãû×Ö
-    string type;//±êÊ¶·ûÃû×Ö
+    string name;//åå­—
+    string type;//æ ‡è¯†ç¬¦åå­—
     int low;
     int up;
     int length;
 };
 
-struct typechart//ÀàĞÍ±í
+struct typechart//ç±»å‹è¡¨
 {
-    char type;//Êı×éÀàĞÍ¹Ì¶¨Îª¡®a'
-    int a[3];//ÆğÊ¼ ÖÕÖ¹  Ã¿Ò»¸öµÄ´óĞ¡
-    char type1;//Ã¿¸öÊı¾İµÄÀàĞÍ
+    char type;//æ•°ç»„ç±»å‹å›ºå®šä¸ºâ€˜a'
+    int a[3];//èµ·å§‹ ç»ˆæ­¢  æ¯ä¸€ä¸ªçš„å¤§å°
+    char type1;//æ¯ä¸ªæ•°æ®çš„ç±»å‹
 };
 vector<int> length;
 vector<typechart> typechart1;
