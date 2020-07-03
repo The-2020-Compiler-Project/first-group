@@ -122,6 +122,14 @@ int automaton(string strline,int i,vector<token> &token1)//自动机
             j=strline.size();
             break;
         }
+        case 12:
+        {
+            token token2;
+            token2.type='J';
+            token2.value=strline1;
+            token1.push_back(token2);
+            break;
+        }
         case 13:
         {
             token token2;

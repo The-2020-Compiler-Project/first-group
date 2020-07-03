@@ -1,0 +1,59 @@
+Type id ( Parastate ) { Funcblock }
+int
+float
+char
+void
+( Exp )
+id A
+number A
+ch A
+Divi Item
+Factor Faccycle
+* Factor B Faccycle
+/ Factor C Faccycle
+@
++ Divi D Item
+- Divi E Item
+@
+State Stateclo
+@
+Type id A Init
+id A Init
+= Rvalue F
+@
+Exp
+, State Stateclo
+@
+Staclo ; Funcbloclo
+Statement Staclo
+@
+State
+Staclo ; Funcbloclo
+Whilecycle Funcbloclo
+Condistate Funcbloclo
+Funcend Funcbloclo
+Coutstate Funcbloclo
+Cinstate Funcbloclo
+@
+Type id Callstate
+= Rvalue ;
+( Paralist ) ;
+Para Paraclo
+, Para Paraclo
+@
+id
+number
+string
+while J ( Logicexp ) K { Funcblock } L
+Exp Logicopera Exp T
+> O
+< P
+== Q
+>= R
+<= S
+if ( Logicexp ) G { Funcblock } Nor
+else H { Funcblock } I
+@
+return Factor ;
+cout << id M ;
+cin >> id N ;

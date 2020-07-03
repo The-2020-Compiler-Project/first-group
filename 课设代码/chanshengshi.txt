@@ -1,0 +1,30 @@
+Funcdef -> Type id ( Parastate ) { Funcblock }
+Type -> int | float | char | void
+Factor -> ( Exp ) | id | number | ch
+Exp -> Divi Item
+Divi -> Factor Faccycle
+Faccycle -> * Factor Faccycle | / Factor Faccycle | @
+Item -> + Divi Item | - Divi Item | @
+Parastate -> State Stateclo | @
+State -> Type id Init | id Init
+Init -> = Rvalue | @
+Rvalue -> Exp
+Stateclo -> , State Stateclo | @
+Funcblock -> Staclo ; Funcbloclo
+Staclo -> Statement Staclo | @
+Statement -> State
+Funcbloclo -> Staclo ; Funcbloclo | Whilecycle Funcbloclo | Condistate Funcbloclo | Funcend Funcbloclo | Coutstate Funcbloclo | Cinstate Funcbloclo | @
+Opera -> Type id Callstate
+Callstate -> = Rvalue ; | ( Paralist ) ;
+Paralist -> Para Paraclo
+Paraclo -> , Para Paraclo | @
+Para -> id | number | string
+Whilecycle -> while ( Logicexp ) { Funcblock }
+Logicexp -> Exp Logicopera Exp
+Logicopera -> > | < | == | >= | <=
+Condistate -> if ( Logicexp ) { Funcblock } Nor
+Nor -> else { Funcblock } | @
+Funcend -> return Factor ;
+Coutstate -> cout << id ;
+Cinstate -> cin >> id ;
+end
