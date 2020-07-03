@@ -1,1 +1,1 @@
-Funcdef Type Factor Exp Divi Faccycle Item Parastate State Init Rvalue Stateclo Funcblock Staclo Statement Funcbloclo Opera Callstate Paralist Paraclo Para Whilecycle Logicexp Logicopera Condistate Nor Funcend Coutstate Cinstate
+Funcdef Type Factor Exp Divi Faccycle Item Parastate State Init Rvalue Stateclo Funcblock Staclo Statement Funcbloclo Opera Callstate Paralist Paraclo Para Whilecycle Logicexp Logicopera Condistate Nor Funcend Coutstate Cinstate Strustate

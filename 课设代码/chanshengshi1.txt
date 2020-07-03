@@ -3,10 +3,12 @@ int
 float
 char
 void
+string
 ( Exp )
 id A
 number A
 ch A
+str A
 Divi Item
 Factor Faccycle
 * Factor B Faccycle
@@ -33,8 +35,10 @@ Whilecycle Funcbloclo
 Condistate Funcbloclo
 Funcend Funcbloclo
 Coutstate Funcbloclo
+Strustate Funcbloclo
 Cinstate Funcbloclo
 @
+struct id { Funcbloclo } ;
 Type id Callstate
 = Rvalue ;
 ( Paralist ) ;

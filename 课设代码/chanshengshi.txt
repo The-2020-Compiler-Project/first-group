@@ -1,6 +1,6 @@
 Funcdef -> Type id ( Parastate ) { Funcblock }
-Type -> int | float | char | void
-Factor -> ( Exp ) | id | number | ch
+Type -> int | float | char | void | string
+Factor -> ( Exp ) | id | number | ch | str
 Exp -> Divi Item
 Divi -> Factor Faccycle
 Faccycle -> * Factor Faccycle | / Factor Faccycle | @
@@ -13,7 +13,8 @@ Stateclo -> , State Stateclo | @
 Funcblock -> Staclo ; Funcbloclo
 Staclo -> Statement Staclo | @
 Statement -> State
-Funcbloclo -> Staclo ; Funcbloclo | Whilecycle Funcbloclo | Condistate Funcbloclo | Funcend Funcbloclo | Coutstate Funcbloclo | Cinstate Funcbloclo | @
+Funcbloclo -> Staclo ; Funcbloclo | Whilecycle Funcbloclo | Condistate Funcbloclo | Funcend Funcbloclo | Coutstate Funcbloclo | Strustate Funcbloclo | Cinstate Funcbloclo | @
+Strustate -> struct id { Funcbloclo } ;
 Opera -> Type id Callstate
 Callstate -> = Rvalue ; | ( Paralist ) ;
 Paralist -> Para Paraclo
