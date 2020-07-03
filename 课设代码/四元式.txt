@@ -276,6 +276,8 @@ string returntype(token token2)
         return "number";
     else if(token2.type=='c')
         return "ch";
+    else if(token2.type=='S')
+        return "str";
     else
     {
         return token2.value;
