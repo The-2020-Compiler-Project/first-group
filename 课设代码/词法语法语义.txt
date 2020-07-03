@@ -788,10 +788,10 @@ void createfour(char ch)
     else if(ch=='T')
     {
         fourarray fourarray1;
-        token token2;
-        token2=backtoken.top();
-        backtoken.pop();
-        fourarray1.name1=token2;
+        token token2;     
+        fourarray1.name1.value=optcharstack.top();
+        optcharstack.pop();
+        fourarray1.name1.type='J';  
         token2=optstack.top();
         optstack.pop();
         fourarray1.name3=token2;
@@ -856,7 +856,7 @@ void printfour()
 {
     for(int i=0;i<chararray.size();i++)
     {
-        cout<<chararray[i].name1.value<<"    "<<chararray[i].name2.value<<"    "<<chararray[i].name3.value<<"    "<<chararray[i].name4.value<<endl;
+        cout<<left<<setw(10)<<chararray[i].name1.value<<left<<setw(10)<<chararray[i].name2.value<<left<<setw(10)<<chararray[i].name3.value<<left<<setw(10)<<chararray[i].name4.value<<endl;
     }
 }
 void semantic_analysis()
