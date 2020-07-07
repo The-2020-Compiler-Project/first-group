@@ -1,4 +1,4 @@
-#include "compile.h" // 用这个  这个里面有符号表和四元式
+#include "compile.h"
 void autoinit()
 {
     for (int hh = 0; hh < 18; hh++) //状态转移方程初始化
