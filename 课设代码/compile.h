@@ -12,6 +12,7 @@
 #include <fstream>
 #include <stdlib.h>
 using namespace std;
+
 set<string> keyword = {"int", "while", "cin", "cout", "return", "if", "else", "float", "char", "void", "string", "struct"}; //关键词表
 set<char> mark = {'-', '*', '+', '/', '{', '}', ',', ';', '(', ')', '[', ']'};                                              //界符表
 set<string> mark1 = {"int", "void", "float", "string", "char"};
