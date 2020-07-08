@@ -1,4 +1,70 @@
 #include "compile.h"
+void edit()
+{
+    ifstream fp1;
+    ofstream fp2;
+    fp1.open("error.txt");
+    fp2.open("in.txt");
+    if(!fp1.is_open() or !fp2.is_open()) 
+    {
+        cout<<"error"<<endl;
+        return;
+    }
+    string ss;
+    while(!fp1.eof())
+    {
+        fp1>>ss;
+        if(ss=="#include" or ss=="using" or (ss[0]=='/' && ss[1]=='/'))
+        {
+            getline(fp1,ss);
+            continue;
+        }
+        fp2<<ss;
+        while(fp1.peek()!='\n' and !fp1.eof())
+        {
+            fp1>>ss;
+            if(ss[0]=='/' && ss[1]=='/')
+            {
+                getline(fp1,ss);
+                break;
+            }
+            fp2<<" "<<ss;
+        }
+        if(!fp1.eof()) fp2<<'\n';
+    }
+    fp1.close();
+    fp2.close();
+}
+bool redef_or_notdef()
+{
+    bool flag=true;
+    set<string> teststack={};
+    for(int i=1;i<all.size();i++)
+    {
+        int j=0;
+        if(all[i][0].value=="int" or all[i][0].value=="char" or all[i][0].value=="float" or all[i][0].value=="string" or all[i][0].value=="struct")
+        {
+            j=2;
+            if(all[i].size()==1) continue;
+            if(teststack.find(all[i][1].value)==teststack.end()) teststack.insert(all[i][1].value);
+            else 
+            {
+                cout<<"重定义标识符："<<all[i][1].value<<endl;
+                flag=false;
+            }
+        }
+        for(;j<all[i].size();j++)
+        {
+            if(all[i][j].type=='B')
+            {
+                if(teststack.find(all[i][j].value)!=teststack.end()) continue;
+                cout<<"未定义标识符："<<all[i][j].value<<endl;
+                flag=false;
+            }
+        }
+    }
+    return flag;
+}
 void autoinit()
 {
     for(int hh=0;hh<18;hh++)//状态转移方程初始化
@@ -576,7 +642,7 @@ void initProcess()
         process1.push_back(strline);
     }
 }
-void createfour(char ch)
+void createfour(char ch)//创建四元式
 {
     if(ch=='A')
     {
@@ -806,7 +872,7 @@ void createfour(char ch)
         optstack.push(token2);
     }
 }
-void reseveread(string x)
+void reseveread(string x)//反转输出
 {
     vector<string> nihao;
     string xx="";
@@ -837,7 +903,7 @@ bool iszchar(string token2)
         return true;
     }
 }
-string returntype(token token2)
+string returntype(token token2)//返回值类型
 {
     if(token2.type=='B')
         return "id";
@@ -852,20 +918,21 @@ string returntype(token token2)
         return token2.value;
     }
 }
-void printfour()
+void printfour()//打印
 {
     for(int i=0;i<chararray.size();i++)
     {
         cout<<left<<setw(10)<<chararray[i].name1.value<<left<<setw(10)<<chararray[i].name2.value<<left<<setw(10)<<chararray[i].name3.value<<left<<setw(10)<<chararray[i].name4.value<<endl;
     }
 }
-void semantic_analysis()
+void semantic_analysis()//语法分析
 {
     semantictoken.push("Funcdef");
     token token2;
     token2.type='J';
     token2.value="@";
     vector<token> ALL;
+    cout<<"语法分析结果：";
     for(int i=0;i<all.size();i++)
     {
         for(int j=0;j<all[i].size();j++)
@@ -880,7 +947,6 @@ void semantic_analysis()
         string str1;
         str1=semantictoken.top();
         semantictoken.pop();
-        cout<<str1<<"  "<<ALL[num].value<<endl;
         if(str1.size()==1&&str1[0]<='Z'&&str1[0]>='A')
         {
             createfour(str1[0]);
@@ -923,6 +989,7 @@ void semantic_analysis()
             }
         }
     }
+    cout<<"正确"<<endl;
 }
 bool isinout(fourarray jsd)//判断是否为输入输出语句
 {
@@ -1166,7 +1233,7 @@ void printfnewfour()//打印
         cout<<left<<setw(10)<<newchararrray[k].name4.value<<endl;;
     }
 }
-void insertfour()
+void insertfour()//插入四元式
 {
     for(int k=0;k<inoutfour.size();k++)
     {
@@ -1181,11 +1248,374 @@ void insertfour()
         
     }
 }
+void printchart()
+{   
+    cout<<"符号表如下"<<endl;
+    cout<<left<<setw(10)<<"name"<<left<<setw(10)<<"type"<<left<<setw(10)<<"cat"<<left<<setw(10)<<"address"<<endl;
+    for(int k=0;k<mainchart1[0].length;k++)
+    {
+        cout<<left<<setw(10)<<mainchart1[k].name;
+        cout<<left<<setw(10)<<mainchart1[k].type;
+        cout<<left<<setw(10)<<mainchart1[k].cat;
+        cout<<left<<setw(2)<<mainchart1[k].address.point<<' '<<mainchart1[k].address.type<<endl;
+    }
+    cout<<"函数表如下"<<endl;
+    cout<<left<<setw(10)<<"level"<<left<<setw(10)<<"off"<<left<<setw(10)<<"fn"<<endl;
+    for(int k=0;k<funcchart1[0].length;k++)
+    {
+        cout<<left<<setw(10)<<funcchart1[k].level;
+        cout<<left<<setw(10)<<funcchart1[k].off;
+        cout<<left<<setw(10)<<funcchart1[k].fn<<endl;
+        cout<<left<<setw(10)<<"name"<<left<<setw(10)<<"type"<<left<<setw(10)<<"cat"<<left<<setw(10)<<"address"<<endl;
+        for(int j=0;j<funcchart1[k].para[0].length;j++)
+        {
+            cout<<left<<setw(10)<<funcchart1[k].para[j].name;
+            cout<<left<<setw(10)<<funcchart1[k].para[j].type;
+            cout<<left<<setw(10)<<funcchart1[k].para[j].cat;
+            cout<<left<<setw(2)<<funcchart1[k].para[j].address.point<<' '<<funcchart1[k].para[j].address.type<<endl;
+        }
+    }
+    cout<<"类型表如下"<<endl;
+    cout<<left<<setw(10)<<"type"<<left<<setw(10)<<"address"<<endl;
+    for(int k=0;k<typechart1.size();k++)
+    {
+        cout<<left<<setw(10)<<typechart1[k].type<<typechart1[k].address.point<<' '<<typechart1[k].address.type<<endl;
+    }
+    cout<<"结构体表如下"<<endl;
+    cout<<left<<setw(10)<<"name"<<left<<setw(10)<<"off"<<left<<setw(10)<<"type"<<endl;
+    for(int k=0;k<structchart1.size();k++)
+    {
+        cout<<left<<setw(10)<<structchart1[k].name<<left<<setw(10)<<structchart1[k].off<<left<<setw(10)<<structchart1[k].type<<endl;
+    }
+    cout<<"数组表如下"<<endl;
+    cout<<left<<setw(10)<<"low"<<left<<setw(10)<<"up"<<left<<setw(10)<<"type"<<left<<setw(10)<<"size"<<endl;
+    for(int k=0;k<numchart1.size();k++)
+    {
+        cout<<left<<setw(10)<<numchart1[k].low<<left<<setw(10)<<numchart1[k].up<<left<<setw(10)<<numchart1[k].type<<left<<setw(10)<<numchart1[k].size<<endl;
+    }
+    cout<<"长度表"<<endl;
+    for(int k=0;k<length.size();k++)
+    {
+        cout<<length[k]<<endl;
+    }
+    cout<<"活动记录如下"<<endl;
+    cout<<left<<setw(10)<<"name"<<left<<setw(10)<<"type"<<left<<setw(10)<<"low"<<left<<setw(10)<<"up"<<endl;
+    for(int k=0;k<vall1[0].length;k++)
+    {
+        cout<<left<<setw(10)<<vall1[k].name;
+        cout<<left<<setw(10)<<vall1[k].type;
+        cout<<left<<setw(10)<<vall1[k].low;
+        cout<<left<<setw(10)<<vall1[k].up<<endl;
+    }
+}
+int judge(vector<token> token2)//判断
+{
+    if(token2[0].value=="struct")//结构体
+        return 4;
+    if(token2.size()<3)
+        return 100;
+    if(mark1.find(token2[0].value)!=mark1.end())
+    {
+        if((token2[1].type=='B'||token2[1].value=="main")&&token2[2].value=="(")//判断函数
+        {
+            return 1;
+        }
+        else if(token2[1].type=='B'&&token2[2].value=="[")//数组
+        {
+            return 3;
+        }
+        else//其他
+        {
+            return 2;
+        }
+    }
+    else
+    {
+        return 100;
+    }
+    
+}
+int returnint(string xx)
+{
+    int total=0;
+    for(int i=0;i<xx.size();i++)
+    {
+        total=total*10;
+        total=total+xx[i]-48;
+    }
+    return total;
+
+}
+int returnsize(token token1)//返回变量类型长度
+{
+    if(token1.value=="int"||token1.value=="float")
+    {
+        return 4;
+    }
+    else if(token1.value=="char")
+    {
+        return 1;
+    }
+    else
+    {
+        return token1.value.size();
+    }  
+}
+void numchartwrite(vector<token> token1)//数组的填写
+{
+    mainchart1[mainchart1[0].length].name=token1[1].value;
+    mainchart1[mainchart1[0].length].type="t"+to_string(typechart1.size());
+    mainchart1[mainchart1[0].length].cat="d";
+    mainchart1[mainchart1[0].length].address.type='l';
+    mainchart1[mainchart1[0].length].address.point=length.size();
+    mainchart1[0].length++;
+    typechart typechart2;
+    typechart2.type='a';
+    typechart2.address.type='a';
+    typechart2.address.point=numchart1.size();
+    typechart1.push_back(typechart2);
+    numchart numchart2;
+    numchart2.low=1;
+    numchart2.up=returnint(token1[3].value);
+    numchart2.type=token1[0].value[0];
+    numchart2.size=returnsize(token1[0]);
+    numchart1.push_back(numchart2);
+    vall1[vall1[0].length].name="局部变量";
+    vall1[vall1[0].length].type=token1[1].value;
+    vall1[vall1[0].length].low=vall1[vall1[0].length-1].up+1;
+    vall1[vall1[0].length].up=vall1[vall1[0].length].low+numchart2.up*numchart2.size-1;
+    vall1[0].length++;
+    length.push_back(numchart2.up*numchart2.size);
+
+}
+void vallsomevar(vector<token> token1)//赋值行启作用
+{
+    for(int i=1;i<token1.size();i++)
+    {
+        if(token1[i].type=='B')
+        {
+            vall1[vall1[0].length].name="局部变量";
+            vall1[vall1[0].length].type=token1[i].value;
+            vall1[vall1[0].length].low=vall1[vall1[0].length-1].up+1;
+            if(token1[0].value=="int"||token1[0].value=="float")
+            {
+                vall1[vall1[0].length].up=vall1[vall1[0].length].low+returnsize(token1[0])-1;
+                vall1[0].length++;
+            }
+            else
+            {
+                if(token1[0].value=="string")
+                {
+                    for(int k=i;k<token1.size();k++)
+                    {
+                        if(token1[k].type=='S')
+                        {
+                            vall1[vall1[0].length].up=vall1[vall1[0].length].low+token1[k].value.size()-1;
+                            vall1[0].length++;
+                        }
+                    }
+                }
+                else if(token1[0].value=="char")
+                {
+                    vall1[vall1[0].length].up=vall1[vall1[0].length].low;
+                    vall1[0].length++;
+                }
+            }
+            
+        }
+        
+    }
+}
+void varwrite(vector<token> token1)//赋值时填写
+{
+    for(int i=1;i<token1.size();i++)
+    {
+        if(token1[i].type=='B')
+        {
+            mainchart1[mainchart1[0].length].name=token1[i].value;
+            mainchart1[mainchart1[0].length].type=token1[0].value;
+            mainchart1[mainchart1[0].length].cat="v";
+            mainchart1[mainchart1[0].length].address.type='v';
+            for(int k=0;k<vall1[0].length;k++)
+            {
+                if(vall1[k].type==token1[i].value)
+                {
+                    mainchart1[mainchart1[0].length].address.point=k;
+                }
+            }
+            mainchart1[0].length++;
+            //地址
+        }
+    }
+}
+int structchartwrite(vector<vector<token>> token1,int i)//结构体表
+{
+    mainchart1[mainchart1[0].length].name=token1[i][1].value;
+    mainchart1[mainchart1[0].length].type="t"+to_string(typechart1.size());
+    mainchart1[mainchart1[0].length].cat="d";
+    mainchart1[mainchart1[0].length].address.type='l';
+    mainchart1[mainchart1[0].length].address.point=length.size();
+    mainchart1[0].length++;
+    i++;
+    i++;
+    int size=0;
+    typechart typechart2;
+    typechart2.type='S';
+    typechart2.address.type='S';
+    typechart2.address.point=structchart1.size();
+    typechart1.push_back(typechart2);
+    while(1)
+    {
+        if(token1[i][0].value=="}")
+            break;
+        vallsomevar(token1[i]);
+        varwrite(token1[i]);
+        structchart structchart2;
+        structchart2.name=token1[i][1].value;
+        structchart2.off=size;
+        structchart2.type=token1[i][0].value[0];
+        structchart1.push_back(structchart2);
+        size=size+returnsize(token1[i][0]);
+        i++;
+    }
+    length.push_back(size);
+    return i;
+}
+void funcwrite(vector<token> token1)//函数表的填写
+{
+    mainchart1[mainchart1[0].length].name=token1[1].value;
+    mainchart1[mainchart1[0].length].type=token1[0].value;
+    mainchart1[mainchart1[0].length].cat="f";
+    mainchart1[mainchart1[0].length].address.type='f';
+    mainchart1[mainchart1[0].length].address.point=funcchart1[0].length;
+    mainchart1[0].length++;
+    funcchart1[funcchart1[0].length].off=3;
+    funcchart1[funcchart1[0].length].level=level;
+    funcchart1[funcchart1[0].length].fn=0;
+    funcchart1[funcchart1[0].length].para[0].length=0;
+    for(int i=2;i<token1.size();i++)
+    {
+        if(token1[i].type=='B')
+        {
+            mainchart1[mainchart1[0].length].name=token1[i].value;
+            funcchart1[funcchart1[0].length].para[funcchart1[funcchart1[0].length].para[0].length].name=token1[i].value;
+            mainchart1[mainchart1[0].length].type=token1[i-1].value;
+            funcchart1[funcchart1[0].length].para[funcchart1[funcchart1[0].length].para[0].length].type=token1[i-1].value;
+            mainchart1[mainchart1[0].length].cat='v';
+            funcchart1[funcchart1[0].length].para[funcchart1[funcchart1[0].length].para[0].length].cat='v';
+            mainchart1[mainchart1[0].length].address.type='v';
+            funcchart1[funcchart1[0].length].para[funcchart1[funcchart1[0].length].para[0].length].address.type='v';
+            for(int k=0;k<vall1[0].length;k++)
+            {
+                if(vall1[k].type==token1[i].value)
+                {
+                    mainchart1[mainchart1[0].length].address.point=k;
+                    funcchart1[funcchart1[0].length].para[funcchart1[funcchart1[0].length].para[0].length].address.point=k;
+                }
+            }
+            mainchart1[0].length++;
+            funcchart1[funcchart1[0].length].para[0].length++;
+        }
+    }
+    funcchart1[0].length++;
+}
+void vallinit()//活动记录初始化
+{
+    vall1[0].length=0;
+    vall1[vall1[0].length].name="old sp";
+    vall1[vall1[0].length].type="";
+    vall1[vall1[0].length].low=0;
+    vall1[vall1[0].length].up=0;
+    vall1[0].length++;
+    vall1[vall1[0].length].name="返回地址";
+    vall1[vall1[0].length].type="";
+    vall1[vall1[0].length].low=1;
+    vall1[vall1[0].length].up=1;
+    vall1[0].length++;
+    vall1[vall1[0].length].name="全局display变量";
+    vall1[vall1[0].length].type="";
+    vall1[vall1[0].length].low=2;
+    vall1[vall1[0].length].up=2;
+    vall1[0].length++;
+}
+
+void writevarnum(vector<token> token1)//函数行启作用
+{
+    int num=0;
+    vall1[vall1[0].length].name="参数个数";
+    vall1[vall1[0].length].type="";
+    vall1[vall1[0].length].low=3;
+    vall1[vall1[0].length].up=3;
+    vall1[0].length++;
+    for(int i=2;i<token1.size();i++)
+    {
+        if(token1[i].type=='B')
+        {
+            num++;
+        }
+    }
+    vall1[vall1[0].length-1].type=to_string(num);
+    for(int i=2;i<token1.size();i++)
+    {
+        if(token1[i].type=='B')
+        {
+            vall1[vall1[0].length].name="形式单元";
+            vall1[vall1[0].length].type=token1[i].value;
+            vall1[vall1[0].length].low=vall1[vall1[0].length-1].up+1;
+            vall1[vall1[0].length].up=vall1[vall1[0].length].low+returnsize(token1[i-1])-1;
+            vall1[0].length++;
+        }
+    }
+    vall1[vall1[0].length].name="display表";
+    vall1[vall1[0].length].type="0";
+    vall1[vall1[0].length].low=vall1[vall1[0].length-1].up+1;
+    vall1[vall1[0].length].up=vall1[vall1[0].length-1].up+1;
+    vall1[0].length++;
+
+}
+
+void chartwrite(vector<vector<token>> token1)//活动记录符号表的填写
+{
+    vallinit();
+    mainchart1[0].length=0;
+    funcchart1[0].length=0;
+    for(int i=0;i<token1.size();i++)
+    {
+        int k=judge(token1[i]);
+        if(k==1)
+        {
+            writevarnum(token1[i]);
+            level++;
+            funcwrite(token1[i]);
+        }
+        else if(k==2)
+        {
+            vallsomevar(token1[i]);
+            varwrite(token1[i]);
+        }
+        else if(k==3)
+        {
+            numchartwrite(token1[i]);
+        }
+        else if(k==4)
+        {
+            i=structchartwrite(token1,i);
+        }
+        else
+        {
+            continue;
+        }
+    }
+}
 int main()
 {
     char* filepath="in.txt";
+    edit();
     autoinit();
     dotoken(filepath);
+    redef_or_notdef();
+    chartwrite(all);
+    printchart();
     readin();
     Getfirst();
     int n=20;

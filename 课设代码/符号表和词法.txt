@@ -201,6 +201,12 @@ void printchart()
     {
         cout<<left<<setw(10)<<structchart1[k].name<<left<<setw(10)<<structchart1[k].off<<left<<setw(10)<<structchart1[k].type<<endl;
     }
+    cout<<"数组表如下"<<endl;
+    cout<<left<<setw(10)<<"low"<<left<<setw(10)<<"up"<<left<<setw(10)<<"type"<<left<<setw(10)<<"size"<<endl;
+    for(int k=0;k<numchart1.size();k++)
+    {
+        cout<<left<<setw(10)<<numchart1[k].low<<left<<setw(10)<<numchart1[k].up<<left<<setw(10)<<numchart1[k].type<<left<<setw(10)<<numchart1[k].size<<endl;
+    }
     cout<<"长度表"<<endl;
     for(int k=0;k<length.size();k++)
     {
@@ -279,7 +285,7 @@ void numchartwrite(vector<token> token1)//数组的填写
     mainchart1[0].length++;
     typechart typechart2;
     typechart2.type='a';
-    typechart2.address.type='n';
+    typechart2.address.type='a';
     typechart2.address.point=numchart1.size();
     typechart1.push_back(typechart2);
     numchart numchart2;
