@@ -61,7 +61,7 @@ struct fourarray
     token name1, name2, name3, name4; //四元式
 };
 vector<fourarray> chararray, newchararrray; //存放四元式序列
-stack<token> backtoken, optstack;           //    操作数栈
+stack<token> backtoken, optstack;           //操作数栈
 stack<string> optcharstack, semantictoken;  //操作符栈 语义栈
 int nowuse = 0;
 

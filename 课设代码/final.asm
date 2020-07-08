@@ -1,9 +1,16 @@
 DSEG    SEGMENT  
+i       DW 0
+a       DW 0
+d       DW 0
+t0      DB 0
+r       DW 0
+lo      DW 0
+t3      DW 0
+s       DW 0
+t5      DB 0
+i       DW 0
+r       DW 0
 string  DB 'PLEASE INPUT:','$'
-cnt     DW 1000 DUP(0)
-float   DD 1000 DUP(0)
-bool    DB 1000 DUP(0)
-char    DB 1000 DUP(0)
 DSEG    ENDS
 SSEG    SEGMENT STACK
 SSEG    ENDS
@@ -26,7 +33,7 @@ MAIN:
         MOV DL,0AH
         MOV AH,02H
         INT 21H
-        MOV DL,0dH
+        MOV DL,0DH
         INT 21H
         MOV a,11
         MOV d,2
@@ -54,7 +61,7 @@ else0:
         MOV AX,a
         ADD AX,t3
         MOV s,AX
-end0:
+ifend0:
 compare1:   
         MOV AX,i
         MOV BX,10
@@ -88,10 +95,9 @@ hex0:
         MOV DL,0AH
         MOV AH,02H
         INT 21H
-        MOV DL,0dH
+        MOV DL,0DH
         INT 21H
         MOV AH,4CH
         INT 21H
 CSEG    ENDS
         END MAIN
-

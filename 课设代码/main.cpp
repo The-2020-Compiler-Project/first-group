@@ -1198,8 +1198,357 @@ void insertfour()
     }
 }
 
+void printchart()
+{
+    cout << endl
+         << "符号表如下" << endl;
+    cout << left << setw(10) << "name" << left << setw(10) << "type" << left << setw(10) << "cat" << left << setw(10) << "address" << endl;
+    for (int k = 0; k < mainchart1[0].length; k++)
+    {
+        cout << left << setw(10) << mainchart1[k].name;
+        cout << left << setw(10) << mainchart1[k].type;
+        cout << left << setw(10) << mainchart1[k].cat;
+        cout << left << setw(2) << mainchart1[k].address.point << ' ' << mainchart1[k].address.type << endl;
+    }
+    // cout << "函数表如下" << endl;
+    // cout << left << setw(10) << "level" << left << setw(10) << "off" << left << setw(10) << "fn" << endl;
+    // for (int k = 0; k < funcchart1[0].length; k++)
+    // {
+    //     cout << left << setw(10) << funcchart1[k].level;
+    //     cout << left << setw(10) << funcchart1[k].off;
+    //     cout << left << setw(10) << funcchart1[k].fn << endl;
+    //     cout << left << setw(10) << "name" << left << setw(10) << "type" << left << setw(10) << "cat" << left << setw(10) << "address" << endl;
+    //     for (int j = 0; j < funcchart1[k].para[0].length; j++)
+    //     {
+    //         cout << left << setw(10) << funcchart1[k].para[j].name;
+    //         cout << left << setw(10) << funcchart1[k].para[j].type;
+    //         cout << left << setw(10) << funcchart1[k].para[j].cat;
+    //         cout << left << setw(2) << funcchart1[k].para[j].address.point << ' ' << funcchart1[k].para[j].address.type << endl;
+    //     }
+    // }
+    // cout << "类型表如下" << endl;
+    // cout << left << setw(10) << "type" << left << setw(10) << "address" << endl;
+    // for (int k = 0; k < typechart1.size(); k++)
+    // {
+    //     cout << left << setw(10) << typechart1[k].type << typechart1[k].address.point << ' ' << typechart1[k].address.type << endl;
+    // }
+    // cout << "结构体表如下" << endl;
+    // cout << left << setw(10) << "name" << left << setw(10) << "off" << left << setw(10) << "type" << endl;
+    // for (int k = 0; k < structchart1.size(); k++)
+    // {
+    //     cout << left << setw(10) << structchart1[k].name << left << setw(10) << structchart1[k].off << left << setw(10) << structchart1[k].type << endl;
+    // }
+    // cout << "长度表" << endl;
+    // for (int k = 0; k < length.size(); k++)
+    // {
+    //     cout << length[k] << endl;
+    // }
+    // cout << "活动记录如下" << endl;
+    // cout << left << setw(10) << "name" << left << setw(10) << "type" << left << setw(10) << "low" << left << setw(10) << "up" << endl;
+    // for (int k = 0; k < vall1[0].length; k++)
+    // {
+    //     cout << left << setw(10) << vall1[k].name;
+    //     cout << left << setw(10) << vall1[k].type;
+    //     cout << left << setw(10) << vall1[k].low;
+    //     cout << left << setw(10) << vall1[k].up << endl;
+    // }
+}
+int judge(vector<token> token2) //判断
+{
+    if (token2[0].value == "struct") //结构体
+        return 4;
+    if (token2.size() < 3)
+        return 100;
+    if (mark1.find(token2[0].value) != mark1.end())
+    {
+        if ((token2[1].type == 'B' || token2[1].value == "main") && token2[2].value == "(") //判断函数
+        {
+            return 1;
+        }
+        else if (token2[1].type == 'B' && token2[2].value == "[") //数组
+        {
+            return 3;
+        }
+        else //其他
+        {
+            return 2;
+        }
+    }
+    else
+    {
+        return 100;
+    }
+}
+int returnint(string xx)
+{
+    int total = 0;
+    for (int i = 0; i < xx.size(); i++)
+    {
+        total = total * 10;
+        total = total + xx[i] - 48;
+    }
+    return total;
+}
+int returnsize(token token1) //返回变量类型长度
+{
+    if (token1.value == "int" || token1.value == "float")
+    {
+        return 4;
+    }
+    else if (token1.value == "char")
+    {
+        return 1;
+    }
+    else
+    {
+        return token1.value.size();
+    }
+}
+void numchartwrite(vector<token> token1) //数组的填写
+{
+    mainchart1[mainchart1[0].length].name = token1[1].value;
+    mainchart1[mainchart1[0].length].type = "t" + to_string(typechart1.size());
+    mainchart1[mainchart1[0].length].cat = "d";
+    mainchart1[mainchart1[0].length].address.type = 'l';
+    mainchart1[mainchart1[0].length].address.point = length.size();
+    mainchart1[0].length++;
+    typechart typechart2;
+    typechart2.type = 'a';
+    typechart2.address.type = 'n';
+    typechart2.address.point = numchart1.size();
+    typechart1.push_back(typechart2);
+    numchart numchart2;
+    numchart2.low = 1;
+    numchart2.up = returnint(token1[3].value);
+    numchart2.type = token1[0].value[0];
+    numchart2.size = returnsize(token1[0]);
+    numchart1.push_back(numchart2);
+    vall1[vall1[0].length].name = "局部变量";
+    vall1[vall1[0].length].type = token1[1].value;
+    vall1[vall1[0].length].low = vall1[vall1[0].length - 1].up + 1;
+    vall1[vall1[0].length].up = vall1[vall1[0].length].low + numchart2.up * numchart2.size - 1;
+    vall1[0].length++;
+    length.push_back(numchart2.up * numchart2.size);
+}
+void vallsomevar(vector<token> token1) //赋值行启作用
+{
+    for (int i = 1; i < token1.size(); i++)
+    {
+        if (token1[i].type == 'B')
+        {
+            vall1[vall1[0].length].name = "局部变量";
+            vall1[vall1[0].length].type = token1[i].value;
+            vall1[vall1[0].length].low = vall1[vall1[0].length - 1].up + 1;
+            if (token1[0].value == "int" || token1[0].value == "float")
+            {
+                vall1[vall1[0].length].up = vall1[vall1[0].length].low + returnsize(token1[0]) - 1;
+                vall1[0].length++;
+            }
+            else
+            {
+                if (token1[0].value == "string")
+                {
+                    for (int k = i; k < token1.size(); k++)
+                    {
+                        if (token1[k].type == 'S')
+                        {
+                            vall1[vall1[0].length].up = vall1[vall1[0].length].low + token1[k].value.size() - 1;
+                            vall1[0].length++;
+                        }
+                    }
+                }
+                else if (token1[0].value == "char")
+                {
+                    vall1[vall1[0].length].up = vall1[vall1[0].length].low;
+                    vall1[0].length++;
+                }
+            }
+        }
+    }
+}
+void varwrite(vector<token> token1) //赋值时填写
+{
+    for (int i = 1; i < token1.size(); i++)
+    {
+        if (token1[i].type == 'B')
+        {
+            mainchart1[mainchart1[0].length].name = token1[i].value;
+            mainchart1[mainchart1[0].length].type = token1[0].value;
+            mainchart1[mainchart1[0].length].cat = "v";
+            mainchart1[mainchart1[0].length].address.type = 'v';
+            for (int k = 0; k < vall1[0].length; k++)
+            {
+                if (vall1[k].type == token1[i].value)
+                {
+                    mainchart1[mainchart1[0].length].address.point = k;
+                }
+            }
+            mainchart1[0].length++;
+            //地址
+        }
+    }
+}
+int structchartwrite(vector<vector<token>> token1, int i) //结构体表
+{
+    mainchart1[mainchart1[0].length].name = token1[i][1].value;
+    mainchart1[mainchart1[0].length].type = "t" + to_string(typechart1.size());
+    mainchart1[mainchart1[0].length].cat = "d";
+    mainchart1[mainchart1[0].length].address.type = 'l';
+    mainchart1[mainchart1[0].length].address.point = length.size();
+    mainchart1[0].length++;
+    i++;
+    i++;
+    int size = 0;
+    typechart typechart2;
+    typechart2.type = 'S';
+    typechart2.address.type = 'S';
+    typechart2.address.point = structchart1.size();
+    typechart1.push_back(typechart2);
+    while (1)
+    {
+        if (token1[i][0].value == "}")
+            break;
+        vallsomevar(token1[i]);
+        varwrite(token1[i]);
+        structchart structchart2;
+        structchart2.name = token1[i][1].value;
+        structchart2.off = size;
+        structchart2.type = token1[i][0].value[0];
+        structchart1.push_back(structchart2);
+        size = size + returnsize(token1[i][0]);
+        i++;
+    }
+    length.push_back(size);
+    return i;
+}
+void funcwrite(vector<token> token1) //函数表的填写
+{
+    mainchart1[mainchart1[0].length].name = token1[1].value;
+    mainchart1[mainchart1[0].length].type = token1[0].value;
+    mainchart1[mainchart1[0].length].cat = "f";
+    mainchart1[mainchart1[0].length].address.type = 'f';
+    mainchart1[mainchart1[0].length].address.point = funcchart1[0].length;
+    mainchart1[0].length++;
+    funcchart1[funcchart1[0].length].off = 3;
+    funcchart1[funcchart1[0].length].level = level;
+    funcchart1[funcchart1[0].length].fn = 0;
+    funcchart1[funcchart1[0].length].para[0].length = 0;
+    for (int i = 2; i < token1.size(); i++)
+    {
+        if (token1[i].type == 'B')
+        {
+            mainchart1[mainchart1[0].length].name = token1[i].value;
+            funcchart1[funcchart1[0].length].para[funcchart1[funcchart1[0].length].para[0].length].name = token1[i].value;
+            mainchart1[mainchart1[0].length].type = token1[i - 1].value;
+            funcchart1[funcchart1[0].length].para[funcchart1[funcchart1[0].length].para[0].length].type = token1[i - 1].value;
+            mainchart1[mainchart1[0].length].cat = 'v';
+            funcchart1[funcchart1[0].length].para[funcchart1[funcchart1[0].length].para[0].length].cat = 'v';
+            mainchart1[mainchart1[0].length].address.type = 'v';
+            funcchart1[funcchart1[0].length].para[funcchart1[funcchart1[0].length].para[0].length].address.type = 'v';
+            for (int k = 0; k < vall1[0].length; k++)
+            {
+                if (vall1[k].type == token1[i].value)
+                {
+                    mainchart1[mainchart1[0].length].address.point = k;
+                    funcchart1[funcchart1[0].length].para[funcchart1[funcchart1[0].length].para[0].length].address.point = k;
+                }
+            }
+            mainchart1[0].length++;
+            funcchart1[funcchart1[0].length].para[0].length++;
+        }
+    }
+    funcchart1[0].length++;
+}
+void vallinit() //活动记录初始化
+{
+    vall1[0].length = 0;
+    vall1[vall1[0].length].name = "old sp";
+    vall1[vall1[0].length].type = "";
+    vall1[vall1[0].length].low = 0;
+    vall1[vall1[0].length].up = 0;
+    vall1[0].length++;
+    vall1[vall1[0].length].name = "返回地址";
+    vall1[vall1[0].length].type = "";
+    vall1[vall1[0].length].low = 1;
+    vall1[vall1[0].length].up = 1;
+    vall1[0].length++;
+    vall1[vall1[0].length].name = "全局display变量";
+    vall1[vall1[0].length].type = "";
+    vall1[vall1[0].length].low = 2;
+    vall1[vall1[0].length].up = 2;
+    vall1[0].length++;
+}
+
+void writevarnum(vector<token> token1) //函数行启作用
+{
+    int num = 0;
+    vall1[vall1[0].length].name = "参数个数";
+    vall1[vall1[0].length].type = "";
+    vall1[vall1[0].length].low = 3;
+    vall1[vall1[0].length].up = 3;
+    vall1[0].length++;
+    for (int i = 2; i < token1.size(); i++)
+    {
+        if (token1[i].type == 'B')
+        {
+            num++;
+        }
+    }
+    vall1[vall1[0].length - 1].type = to_string(num);
+    for (int i = 2; i < token1.size(); i++)
+    {
+        if (token1[i].type == 'B')
+        {
+            vall1[vall1[0].length].name = "形式单元";
+            vall1[vall1[0].length].type = token1[i].value;
+            vall1[vall1[0].length].low = vall1[vall1[0].length - 1].up + 1;
+            vall1[vall1[0].length].up = vall1[vall1[0].length].low + returnsize(token1[i - 1]) - 1;
+            vall1[0].length++;
+        }
+    }
+    vall1[vall1[0].length].name = "display表";
+    vall1[vall1[0].length].type = "0";
+    vall1[vall1[0].length].low = vall1[vall1[0].length - 1].up + 1;
+    vall1[vall1[0].length].up = vall1[vall1[0].length - 1].up + 1;
+    vall1[0].length++;
+}
+
+void chartwrite(vector<vector<token>> token1) //活动记录符号表的填写
+{
+    vallinit();
+    mainchart1[0].length = 0;
+    funcchart1[0].length = 0;
+    for (int i = 0; i < token1.size(); i++)
+    {
+        int k = judge(token1[i]);
+        if (k == 1)
+        {
+            writevarnum(token1[i]);
+            level++;
+            funcwrite(token1[i]);
+        }
+        else if (k == 2)
+        {
+            vallsomevar(token1[i]);
+            varwrite(token1[i]);
+        }
+        else if (k == 3)
+        {
+            numchartwrite(token1[i]);
+        }
+        else if (k == 4)
+        {
+            i = structchartwrite(token1, i);
+        }
+        else
+        {
+            continue;
+        }
+    }
+}
+
 // 四元式预处理
-void actionprep()
+void profourele()
 {
     token t1, t2;
     t1.type = 'E';
@@ -1238,6 +1587,17 @@ void actionprep()
     return;
 }
 
+// 符号表搜索
+string typesearch(string value)
+{
+    for (int k = 0; k < mainchart1[0].length; k++)
+    {
+        if (value == mainchart1[k].name)
+            return mainchart1[k].type;
+    }
+    return "NULL";
+}
+
 // 生成目标代码
 void CreateTarget()
 {
@@ -1245,17 +1605,57 @@ void CreateTarget()
     int w = 0;
     int w1 = 3;
     int w2 = 3;
-    std::fstream targetFile(target, ios::out | ios::in);
+    std::fstream targetFile(target, ios::out | ios::trunc);
     targetFile << "DSEG    SEGMENT  " << endl;
     // 数据段
-    
+    for (int i = 0; i < newchararrray.size(); i++)
+    {
+        if (newchararrray[i].name4.value == "_")
+            continue;
+        string typeK = typesearch(newchararrray[i].name4.value);
+        if (typeK == "NULL")
+        {
+            int Len = newchararrray[i].name4.value.length();
+            targetFile << newchararrray[i].name4.value;
+            while (Len < 8)
+            {
+                targetFile << " ";
+                Len++;
+            }
+            string key = newchararrray[i].name1.value;
+            if (key == "+" || key == "-" || key == "*" || key == "/" || key == "=")
+            {
+                string temp = typesearch(newchararrray[i].name2.value);
+                if (temp == "int" || temp == "float")
+                    targetFile << "DW 0" << endl;
+                else if (typeK == "char")
+                    targetFile << "DB 0" << endl;
+                else if (typeK == "string")
+                    targetFile << "DB 1000 DUP(0) , '$'" << endl;
+            }
+            else
+            {
+                targetFile << "DB 0" << endl;
+            }
+        }
+        else
+        {
+            int Len = newchararrray[i].name4.value.length();
+            targetFile << newchararrray[i].name4.value;
+            while (Len < 8)
+            {
+                targetFile << " ";
+                Len++;
+            }
+            if (typeK == "int" || typeK == "float")
+                targetFile << "DW 0" << endl;
+            else if (typeK == "char")
+                targetFile << "DB 0" << endl;
+            else if (typeK == "string")
+                targetFile << "DB 1000 DUP(0) , '$'" << endl;
+        }
+    }
     targetFile << "string  DB 'PLEASE INPUT:','$'" << endl;
-    targetFile << "cnt     DW 1000 DUP(0)" << endl;
-    targetFile << "float   DD 1000 DUP(0)" << endl;
-    targetFile << "bool    DB 1000 DUP(0)" << endl;
-    targetFile << "char    DB 1000 DUP(0)" << endl;
-    int rpg = 0;
-    int bat = 0;
     targetFile << "DSEG    ENDS" << endl;
     targetFile << "SSEG    SEGMENT STACK" << endl;
     targetFile << "SSEG    ENDS" << endl;
@@ -1368,7 +1768,7 @@ void CreateTarget()
         else if (key == "end" && flagIW == 1)
         {
             actid++;
-            targetFile << "end" << ifendid++ << ':' << endl;
+            targetFile << "ifend" << ifendid++ << ':' << endl;
             flagIW = 0;
         }
         else if (key == "while")
@@ -1415,7 +1815,7 @@ void CreateTarget()
             targetFile << "        MOV DL,0AH" << endl;
             targetFile << "        MOV AH,02H" << endl;
             targetFile << "        INT 21H" << endl;
-            targetFile << "        MOV DL,0dH" << endl;
+            targetFile << "        MOV DL,0DH" << endl;
             targetFile << "        INT 21H" << endl;
         }
         else if (key == "cin")
@@ -1431,7 +1831,7 @@ void CreateTarget()
             targetFile << "        MOV DL,0AH" << endl;
             targetFile << "        MOV AH,02H" << endl;
             targetFile << "        INT 21H" << endl;
-            targetFile << "        MOV DL,0dH" << endl;
+            targetFile << "        MOV DL,0DH" << endl;
             targetFile << "        INT 21H" << endl;
         }
     }
@@ -1453,8 +1853,9 @@ void CreateTarget()
 
 void targetcode()
 {
+    cout << "------------------------------------------" << endl;
     cout << "--------------Target Code-----------------" << endl;
-    actionprep();
+    profourele();
     CreateTarget();
     return;
 }
@@ -1475,6 +1876,8 @@ int main()
     initProcess();
     semantic_analysis();
     printfour();
+    chartwrite(all);
+    printchart();
     dooptimifour();
     cout << endl
          << endl
