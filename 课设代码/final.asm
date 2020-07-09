@@ -79,9 +79,9 @@ cout0:
         AND AX,000FH
         MOV DL,AL
         CMP DL,10
-        JB  hex0
+        JB  couth0
         ADD DL,07H
-hex0:
+couth0:
         ADD DL,30H
         MOV AH,02H
         INT 21H
