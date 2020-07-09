@@ -1198,6 +1198,7 @@ void insertfour()
     }
 }
 
+// 符号表输出
 void printchart()
 {
     cout << endl
@@ -1289,7 +1290,8 @@ int returnint(string xx)
     }
     return total;
 }
-int returnsize(token token1) //返回变量类型长度
+//返回变量类型长度
+int returnsize(token token1)
 {
     if (token1.value == "int" || token1.value == "float")
     {
@@ -1304,7 +1306,8 @@ int returnsize(token token1) //返回变量类型长度
         return token1.value.size();
     }
 }
-void numchartwrite(vector<token> token1) //数组的填写
+//数组的填写
+void numchartwrite(vector<token> token1)
 {
     mainchart1[mainchart1[0].length].name = token1[1].value;
     mainchart1[mainchart1[0].length].type = "t" + to_string(typechart1.size());
@@ -1330,7 +1333,8 @@ void numchartwrite(vector<token> token1) //数组的填写
     vall1[0].length++;
     length.push_back(numchart2.up * numchart2.size);
 }
-void vallsomevar(vector<token> token1) //赋值行启作用
+//赋值行启作用
+void vallsomevar(vector<token> token1)
 {
     for (int i = 1; i < token1.size(); i++)
     {
@@ -1366,7 +1370,8 @@ void vallsomevar(vector<token> token1) //赋值行启作用
         }
     }
 }
-void varwrite(vector<token> token1) //赋值时填写
+//赋值时填写
+void varwrite(vector<token> token1)
 {
     for (int i = 1; i < token1.size(); i++)
     {
@@ -1388,7 +1393,8 @@ void varwrite(vector<token> token1) //赋值时填写
         }
     }
 }
-int structchartwrite(vector<vector<token>> token1, int i) //结构体表
+//结构体表
+int structchartwrite(vector<vector<token>> token1, int i)
 {
     mainchart1[mainchart1[0].length].name = token1[i][1].value;
     mainchart1[mainchart1[0].length].type = "t" + to_string(typechart1.size());
@@ -1421,7 +1427,8 @@ int structchartwrite(vector<vector<token>> token1, int i) //结构体表
     length.push_back(size);
     return i;
 }
-void funcwrite(vector<token> token1) //函数表的填写
+//函数表的填写
+void funcwrite(vector<token> token1)
 {
     mainchart1[mainchart1[0].length].name = token1[1].value;
     mainchart1[mainchart1[0].length].type = token1[0].value;
@@ -1459,7 +1466,8 @@ void funcwrite(vector<token> token1) //函数表的填写
     }
     funcchart1[0].length++;
 }
-void vallinit() //活动记录初始化
+//活动记录初始化
+void vallinit()
 {
     vall1[0].length = 0;
     vall1[vall1[0].length].name = "old sp";
@@ -1478,8 +1486,8 @@ void vallinit() //活动记录初始化
     vall1[vall1[0].length].up = 2;
     vall1[0].length++;
 }
-
-void writevarnum(vector<token> token1) //函数行启作用
+//函数行启作用
+void writevarnum(vector<token> token1)
 {
     int num = 0;
     vall1[vall1[0].length].name = "参数个数";
@@ -1512,8 +1520,8 @@ void writevarnum(vector<token> token1) //函数行启作用
     vall1[vall1[0].length].up = vall1[vall1[0].length - 1].up + 1;
     vall1[0].length++;
 }
-
-void chartwrite(vector<vector<token>> token1) //活动记录符号表的填写
+//活动记录符号表的填写
+void chartwrite(vector<vector<token>> token1)
 {
     vallinit();
     mainchart1[0].length = 0;
@@ -1560,12 +1568,12 @@ void prefourele()
     fileend.name2 = t2;
     fileend.name3 = t2;
     fileend.name4 = t2;
-    newchararrray.push_back(fileend);
+    newchararrray.push_back(fileend); //四元式末尾程序结束标志
     for (int i = 0; i < newchararrray.size(); i++)
     {
         if (newchararrray[i].name1.value == "return")
             break;
-        else if (newchararrray[i].name1.value == "while")
+        else if (newchararrray[i].name1.value == "while") //将循环条件提前
         {
             fourarray temp;
             temp.name1 = newchararrray[i].name1;
@@ -1593,9 +1601,9 @@ string typesearch(string value)
     for (int k = 0; k < mainchart1[0].length; k++)
     {
         if (value == mainchart1[k].name)
-            return mainchart1[k].type;
+            return mainchart1[k].type; // 返回类型
     }
-    return "NULL";
+    return "NULL"; // 未搜索到，返回NULL字符串
 }
 
 // 生成目标代码
@@ -1613,6 +1621,7 @@ void CreateTarget()
     {
         if (newchararrray[i].name4.value == "_")
             continue;
+        // 判断符号是否已经申明，避免重定义
         bool flag = false;
         for (int ls = 0; ls < finished.size(); ls++)
             if (finished[ls] == newchararrray[i].name4.value)
@@ -1622,11 +1631,12 @@ void CreateTarget()
         else if (flag == true)
             continue;
         string typeK = typesearch(newchararrray[i].name4.value);
+        // 为中间变量时，根据运算符，搜索第二个符号的类型，以确定类型
         if (typeK == "NULL")
         {
             int Len = newchararrray[i].name4.value.length();
             targetFile << newchararrray[i].name4.value;
-            while (Len < 8)
+            while (Len < 8) // 补充空格，使代码工整
             {
                 targetFile << " ";
                 Len++;
@@ -1634,29 +1644,29 @@ void CreateTarget()
             string key = newchararrray[i].name1.value;
             if (key == "+" || key == "-" || key == "*" || key == "/" || key == "=")
             {
-                string temp = typesearch(newchararrray[i].name2.value);
+                string temp = typesearch(newchararrray[i].name2.value); //搜索第二个符后的类型
                 if (temp == "int" || temp == "float")
                     targetFile << "DW 0" << endl;
                 else if (temp == "char")
                     targetFile << "DB 0" << endl;
                 else if (temp == "string")
                     targetFile << "DB 1000 DUP(0) , '$'" << endl;
-                else
+                else //避免出现未定义的变量导致生成代码出错
                 {
                     cout << "ERROR" << endl;
                     exit(0);
                 }
             }
-            else
+            else //运算符不为上述，则为比较运算，bool型
             {
                 targetFile << "DB 0" << endl;
             }
         }
-        else
+        else // 符号在符号表中，根据类型生成对应申明语句
         {
             int Len = newchararrray[i].name4.value.length();
             targetFile << newchararrray[i].name4.value;
-            while (Len < 8)
+            while (Len < 8) // 补充空格使代码工整
             {
                 targetFile << " ";
                 Len++;
@@ -1669,6 +1679,7 @@ void CreateTarget()
                 targetFile << "DB 1000 DUP(0) , '$'" << endl;
         }
     }
+    //常规代码
     targetFile << "string  DB 'PLEASE INPUT:','$'" << endl;
     targetFile << "DSEG    ENDS" << endl;
     targetFile << "SSEG    SEGMENT STACK" << endl;
@@ -1681,21 +1692,21 @@ void CreateTarget()
     targetFile << "        MOV DS,AX" << endl;
     targetFile << "        MOV AX,SSEG" << endl;
     targetFile << "        MOV SS,AX" << endl;
-    // 标号序号
+    // 标号序号，控制标号防止重定义
     int ifendid = 0;
     int whileendid = 0;
     int elseid = 0;
     int doid = 0;
     int actid = 0;
-    int showid = 0;
+    int coutid = 0;
     int ifid = 0;
-    int hexid = 0;
+    int couthid = 0;
     int flagIW = 0;
     // 代码段
     for (int i = 0; i < newchararrray.size(); i++)
     {
         string key = newchararrray[i].name1.value;
-        if (key == "+" || key == "-")
+        if (key == "+" || key == "-") //加减法
         {
             targetFile << "        MOV AX," << newchararrray[i].name2.value << endl;
             if (key == "+")
@@ -1709,36 +1720,36 @@ void CreateTarget()
             targetFile << newchararrray[i].name3.value << endl;
             targetFile << "        MOV " << newchararrray[i].name4.value << ",AX" << endl;
         }
-        else if (key == "*")
+        else if (key == "*") //乘法
         {
-            if ((int)newchararrray[i].name2.value[0] >= 48 && (int)newchararrray[i].name2.value[0] <= 57)
+            if ((int)newchararrray[i].name2.value[0] >= 48 && (int)newchararrray[i].name2.value[0] <= 57) //第一个为立即数时
             {
                 targetFile << "        MOV AL," << newchararrray[i].name2.value << endl;
             }
-            else
+            else //不为立即数时
             {
                 targetFile << "        MOV SI,OFFSET " << newchararrray[i].name2.value << endl;
                 targetFile << "        MOV AL,BYTE PTR [SI]" << endl;
             }
-            if ((int)newchararrray[i].name3.value[0] >= 48 && (int)newchararrray[i].name3.value[0] <= 57)
+            if ((int)newchararrray[i].name3.value[0] >= 48 && (int)newchararrray[i].name3.value[0] <= 57) //第二个为立即数时
             {
                 targetFile << "        MUL " << newchararrray[i].name3.value << endl;
             }
-            else
+            else //不为立即数时
             {
                 targetFile << "        MOV SI,OFFSET " << newchararrray[i].name2.value << endl;
                 targetFile << "        MUL BYTE PTR [SI]" << endl;
             }
             targetFile << "        MOV " << newchararrray[i].name4.value << ",AX" << endl;
         }
-        else if (key == "/")
+        else if (key == "/") //除法
         {
             targetFile << "        MOV AX," << newchararrray[i].name3.value << endl;
-            if ((int)newchararrray[i].name2.value[0] >= 48 && (int)newchararrray[i].name2.value[0] <= 57)
+            if ((int)newchararrray[i].name2.value[0] >= 48 && (int)newchararrray[i].name2.value[0] <= 57) //除数为立即数时
             {
                 targetFile << "        DIV " << newchararrray[i].name2.value << endl;
             }
-            else
+            else //除数不为立即数时
             {
                 targetFile << "        MOV SI,OFFSET " << newchararrray[i].name2.value << endl;
                 targetFile << "        DIV BYTE PTR [SI]" << endl;
@@ -1746,13 +1757,14 @@ void CreateTarget()
             targetFile << "        AND AH,00H" << endl;
             targetFile << "        MOV " << newchararrray[i].name4.value << ",AX" << endl;
         }
-        else if (key == ">" || key == "<" || key == ">=" || key == "<=" || key == "==")
+        else if (key == ">" || key == "<" || key == ">=" || key == "<=" || key == "==") //判断语句
         {
             targetFile << "compare" << actid << ":   " << endl;
             targetFile << "        MOV AX," << newchararrray[i].name2.value << endl;
             targetFile << "        MOV BX," << newchararrray[i].name3.value << endl;
             targetFile << "        CMP AX,BX" << endl;
             targetFile << "        ";
+            // 根据判断语句生成对应跳转代码，跳转位置稍后填写
             if (key == ">")
                 targetFile << "JA ";
             else if (key == "<")
@@ -1764,65 +1776,65 @@ void CreateTarget()
             else if (key == "==")
                 targetFile << "JNE ";
         }
-        else if (key == "=")
+        else if (key == "=") //赋值语句
         {
             targetFile << "        MOV " << newchararrray[i].name4.value << "," << newchararrray[i].name2.value << endl;
         }
         else if (key == "if")
         {
-            targetFile << "else" << elseid << endl;
-            targetFile << "if" << ifid++ << ':' << endl;
+            targetFile << "else" << elseid << endl;      //填写跳转语句的标号
+            targetFile << "if" << ifid++ << ':' << endl; //添加if语句标号
             flagIW = 1;
         }
         else if (key == "else")
         {
-            targetFile << "        JMP ifend" << ifendid << endl;
-            targetFile << "else" << elseid++ << ":" << endl;
+            targetFile << "        JMP ifend" << ifendid << endl; //跳出if
+            targetFile << "else" << elseid++ << ":" << endl;      //添加else语句标号
         }
         else if (key == "end" && flagIW == 1)
         {
             actid++;
-            targetFile << "ifend" << ifendid++ << ':' << endl;
+            targetFile << "ifend" << ifendid++ << ':' << endl; //添加if结束后的标号
             flagIW = 0;
         }
         else if (key == "while")
         {
-            targetFile << "whileend" << whileendid << endl;
+            targetFile << "whileend" << whileendid << endl; //添加跳转语句的标号
             flagIW = 2;
         }
         else if (key == "do")
         {
-            targetFile << "do" << doid++ << ":" << endl;
+            targetFile << "do" << doid++ << ":" << endl; //循环体标号
         }
         else if (key == "end" && flagIW == 2)
         {
-            targetFile << "        JMP compare" << actid++ << endl;
+            targetFile << "        JMP compare" << actid++ << endl; //跳转回循环条件判断
             targetFile << "whileend" << whileendid++ << ":" << endl;
             flagIW = 0;
         }
-        else if (key == "return")
+        else if (key == "return") //程序末尾
         {
             targetFile << "        MOV AH,4CH" << endl;
             targetFile << "        INT 21H" << endl;
         }
-        else if (key == "cout")
+        else if (key == "cout") //输出语句
         {
             targetFile << "        MOV CL,16" << endl;
-            targetFile << "show" << showid << ':' << endl;
+            targetFile << "cout" << coutid << ':' << endl;
             targetFile << "        SUB CL,04" << endl;
             targetFile << "        MOV AX," << newchararrray[i].name4.value << endl;
             targetFile << "        SHR AX,CL" << endl;
             targetFile << "        AND AX,000FH" << endl;
             targetFile << "        MOV DL,AL" << endl;
             targetFile << "        CMP DL,10" << endl;
-            targetFile << "        JB  hex" << hexid << endl;
+            targetFile << "        JB  couth" << couthid << endl;
             targetFile << "        ADD DL,07H" << endl;
-            targetFile << "hex" << hexid++ << ':' << endl;
+            targetFile << "couth" << couthid++ << ':' << endl;
             targetFile << "        ADD DL,30H" << endl;
             targetFile << "        MOV AH,02H" << endl;
             targetFile << "        INT 21H" << endl;
             targetFile << "        CMP CL,0" << endl;
-            targetFile << "        JNE show" << showid++ << endl;
+            targetFile << "        JNE cout" << coutid++ << endl;
             targetFile << "        MOV DL,'H'" << endl;
             targetFile << "        MOV AH,02H" << endl;
             targetFile << "        INT 21H" << endl;
@@ -1832,7 +1844,7 @@ void CreateTarget()
             targetFile << "        MOV DL,0DH" << endl;
             targetFile << "        INT 21H" << endl;
         }
-        else if (key == "cin")
+        else if (key == "cin") //输入语句
         {
             targetFile << "        MOV DX,OFFSET string" << endl;
             targetFile << "        MOV AH,09H" << endl;
@@ -1849,19 +1861,21 @@ void CreateTarget()
             targetFile << "        INT 21H" << endl;
         }
     }
+    // 代码段结束，给出程序入口
     targetFile << "CSEG    ENDS" << endl;
     targetFile << "        END "
                << "MAIN" << endl;
     targetFile.close();
-    std::fstream acto(target, ios::out | ios::in);
-    char stri[10000];
+    // 在命令行输出
+    std::fstream fileout(target, ios::out | ios::in);
+    char filecon[10000];
     for (int i = 0; i < 10000; i++)
     {
-        stri[i] = NULL;
+        filecon[i] = NULL;
     }
-    acto.get(stri, 10000, EOF);
-    acto.close();
-    cout << stri;
+    fileout.get(filecon, 10000, EOF);
+    fileout.close();
+    cout << filecon;
     return;
 }
 

@@ -72,7 +72,7 @@ do0:
         JMP compare1
 whileend0:
         MOV CL,16
-show0:
+cout0:
         SUB CL,04
         MOV AX,i
         SHR AX,CL
@@ -86,7 +86,7 @@ hex0:
         MOV AH,02H
         INT 21H
         CMP CL,0
-        JNE show0
+        JNE cout0
         MOV DL,'H'
         MOV AH,02H
         INT 21H
