@@ -1608,9 +1608,18 @@ void CreateTarget()
     std::fstream targetFile(target, ios::out | ios::trunc);
     targetFile << "DSEG    SEGMENT  " << endl;
     // 数据段
+    vector<string> finished;
     for (int i = 0; i < newchararrray.size(); i++)
     {
         if (newchararrray[i].name4.value == "_")
+            continue;
+        bool flag = false;
+        for (int ls = 0; ls < finished.size(); ls++)
+            if (finished[ls] == newchararrray[i].name4.value)
+                flag = true;
+        if (flag == false)
+            finished.push_back(newchararrray[i].name4.value);
+        else if (flag == true)
             continue;
         string typeK = typesearch(newchararrray[i].name4.value);
         if (typeK == "NULL")
@@ -1628,10 +1637,15 @@ void CreateTarget()
                 string temp = typesearch(newchararrray[i].name2.value);
                 if (temp == "int" || temp == "float")
                     targetFile << "DW 0" << endl;
-                else if (typeK == "char")
+                else if (temp == "char")
                     targetFile << "DB 0" << endl;
-                else if (typeK == "string")
+                else if (temp == "string")
                     targetFile << "DB 1000 DUP(0) , '$'" << endl;
+                else
+                {
+                    cout << "ERROR" << endl;
+                    exit(0);
+                }
             }
             else
             {
@@ -1762,7 +1776,7 @@ void CreateTarget()
         }
         else if (key == "else")
         {
-            targetFile << "        JMP end" << ifendid << endl;
+            targetFile << "        JMP ifend" << ifendid << endl;
             targetFile << "else" << elseid++ << ":" << endl;
         }
         else if (key == "end" && flagIW == 1)

@@ -30,6 +30,6 @@ int main(int g)
     {
         i = i + 1;
     }
-    cout << r;
+    cout << i;
     return 0;
 }

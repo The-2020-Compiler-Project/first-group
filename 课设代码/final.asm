@@ -8,8 +8,6 @@ lo      DW 0
 t3      DW 0
 s       DW 0
 t5      DB 0
-i       DW 0
-r       DW 0
 string  DB 'PLEASE INPUT:','$'
 DSEG    ENDS
 SSEG    SEGMENT STACK
@@ -51,7 +49,7 @@ if0:
         DIV BYTE PTR [SI]
         AND AH,00H
         MOV lo,AX
-        JMP end0
+        JMP ifend0
 else0:
         MOV SI,OFFSET a
         MOV AL,BYTE PTR [SI]
@@ -76,7 +74,7 @@ whileend0:
         MOV CL,16
 show0:
         SUB CL,04
-        MOV AX,r
+        MOV AX,i
         SHR AX,CL
         AND AX,000FH
         MOV DL,AL
