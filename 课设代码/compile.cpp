@@ -1162,7 +1162,6 @@ void noequal(fourarray jsd) //非等于号时
 void dofour() //生成新四元式
 {
     stack<fourarray> nihao;
-    int visit[newfour1.size()] = {0};
     for (int k = newfour1.size() - 1; k >= 0; k--)
     {
         if (newfour1[k].parent == -1 && newfour1[k].children.size() == 0)

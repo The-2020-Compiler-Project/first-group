@@ -74,7 +74,7 @@ whileend0:
         MOV CL,16
 cout0:
         SUB CL,04
-        MOV AX,r
+        MOV AX,i
         SHR AX,CL
         AND AX,000FH
         MOV DL,AL
