@@ -1548,7 +1548,7 @@ void chartwrite(vector<vector<token>> token1) //活动记录符号表的填写
 }
 
 // 四元式预处理
-void profourele()
+void prefourele()
 {
     token t1, t2;
     t1.type = 'E';
@@ -1853,9 +1853,11 @@ void CreateTarget()
 
 void targetcode()
 {
+    chartwrite(all);
+    printchart();
     cout << "------------------------------------------" << endl;
     cout << "--------------Target Code-----------------" << endl;
-    profourele();
+    prefourele();
     CreateTarget();
     return;
 }
@@ -1876,8 +1878,6 @@ int main()
     initProcess();
     semantic_analysis();
     printfour();
-    chartwrite(all);
-    printchart();
     dooptimifour();
     cout << endl
          << endl
