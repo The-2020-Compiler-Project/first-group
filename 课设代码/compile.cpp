@@ -1,5 +1,75 @@
 #include "compile.h"
 
+void edit()
+{
+    ifstream fp1;
+    ofstream fp2;
+    fp1.open("error.txt");
+    fp2.open("in.txt");
+    if (!fp1.is_open() || !fp2.is_open())
+    {
+        cout << "error" << endl;
+        return;
+    }
+    string ss;
+    while (!fp1.eof())
+    {
+        fp1 >> ss;
+        if (ss == "#include" || ss == "using" || (ss[0] == '/' && ss[1] == '/'))
+        {
+            getline(fp1, ss);
+            continue;
+        }
+        fp2 << ss;
+        while (fp1.peek() != '\n' && !fp1.eof())
+        {
+            fp1 >> ss;
+            if (ss[0] == '/' && ss[1] == '/')
+            {
+                getline(fp1, ss);
+                break;
+            }
+            fp2 << " " << ss;
+        }
+        if (!fp1.eof())
+            fp2 << '\n';
+    }
+    fp1.close();
+    fp2.close();
+}
+bool redef_or_notdef()
+{
+    bool flag = true;
+    set<string> teststack = {};
+    for (int i = 1; i < all.size(); i++)
+    {
+        int j = 0;
+        if (all[i][0].value == "int" || all[i][0].value == "char" || all[i][0].value == "float" || all[i][0].value == "string" || all[i][0].value == "struct")
+        {
+            j = 2;
+            if (all[i].size() == 1)
+                continue;
+            if (teststack.find(all[i][1].value) == teststack.end())
+                teststack.insert(all[i][1].value);
+            else
+            {
+                cout << "重定义标识符：" << all[i][1].value << endl;
+                flag = false;
+            }
+        }
+        for (; j < all[i].size(); j++)
+        {
+            if (all[i][j].type == 'B')
+            {
+                if (teststack.find(all[i][j].value) != teststack.end())
+                    continue;
+                cout << "未定义标识符：" << all[i][j].value << endl;
+                flag = false;
+            }
+        }
+    }
+    return flag;
+}
 void autoinit()
 {
     for (int hh = 0; hh < 18; hh++) //状态转移方程初始化
@@ -1893,8 +1963,12 @@ void targetcode()
 int main()
 {
     char *filepath = "in.txt";
+    edit();
     autoinit();
     dotoken(filepath);
+    bool flag = redef_or_notdef();
+    if (flag == false)
+        exit(0);
     readin();
     Getfirst();
     int n = 20;
