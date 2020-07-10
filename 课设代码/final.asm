@@ -6,8 +6,7 @@ t0      DB 0
 r       DW 0
 lo      DW 0
 t3      DW 0
-s       DW 0
-t5      DB 0
+t6      DB 0
 string  DB 'PLEASE INPUT:','$'
 DSEG    ENDS
 SSEG    SEGMENT STACK
@@ -33,18 +32,18 @@ MAIN:
         INT 21H
         MOV DL,0DH
         INT 21H
-        MOV a,11
-        MOV d,2
+        MOV a,2
+        MOV d,11
 compare0:   
         MOV AX,a
         MOV BX,d
         CMP AX,BX
-        JBE else0
+        JAE else0
 if0:
         MOV AX,a
         ADD AX,d
         MOV r,AX
-        MOV AX,d
+        MOV AX,5
         MOV SI,OFFSET a
         DIV BYTE PTR [SI]
         AND AH,00H
@@ -58,13 +57,18 @@ else0:
         MOV t3,AX
         MOV AX,a
         ADD AX,t3
-        MOV s,AX
+        MOV r,AX
+        MOV SI,OFFSET a
+        MOV AL,BYTE PTR [SI]
+        MOV SI,OFFSET a
+        MUL BYTE PTR [SI]
+        MOV lo,AX
 ifend0:
 compare1:   
         MOV AX,i
         MOV BX,10
         CMP AX,BX
-        JB whileend0
+        JA whileend0
 do0:
         MOV AX,i
         ADD AX,1
@@ -74,7 +78,7 @@ whileend0:
         MOV CL,16
 cout0:
         SUB CL,04
-        MOV AX,i
+        MOV AX,lo
         SHR AX,CL
         AND AX,000FH
         MOV DL,AL
@@ -87,6 +91,30 @@ couth0:
         INT 21H
         CMP CL,0
         JNE cout0
+        MOV DL,'H'
+        MOV AH,02H
+        INT 21H
+        MOV DL,0AH
+        MOV AH,02H
+        INT 21H
+        MOV DL,0DH
+        INT 21H
+        MOV CL,16
+cout1:
+        SUB CL,04
+        MOV AX,i
+        SHR AX,CL
+        AND AX,000FH
+        MOV DL,AL
+        CMP DL,10
+        JB  couth1
+        ADD DL,07H
+couth1:
+        ADD DL,30H
+        MOV AH,02H
+        INT 21H
+        CMP CL,0
+        JNE cout1
         MOV DL,'H'
         MOV AH,02H
         INT 21H

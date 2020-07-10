@@ -1835,13 +1835,13 @@ void CreateTarget()
             targetFile << "        ";
             // 根据判断语句生成对应跳转代码，跳转位置稍后填写
             if (key == ">")
-                targetFile << "JA ";
-            else if (key == "<")
                 targetFile << "JB ";
+            else if (key == "<")
+                targetFile << "JA ";
             else if (key == ">=")
-                targetFile << "JAE ";
-            else if (key == "<=")
                 targetFile << "JBE ";
+            else if (key == "<=")
+                targetFile << "JAE ";
             else if (key == "==")
                 targetFile << "JNE ";
         }
