@@ -1,0 +1,699 @@
+int main(int g)
+{
+int a = 11;
+int d = 2;
+int i = 1;
+int q;
+float r;
+int s;
+int lo;
+string sss = "compile";
+struct buhao
+{
+int aa;
+char cc;
+};
+int dd[10];
+char y = 'a';
+float k = 1;
+if (a <= d)
+{
+r = a + d;
+lo = a / 5;
+}
+else
+{
+r = a + a * d;
+lo = a * d;
+}
+cout << r;
+cin >> i;
+while (i < 10)
+{
+i = i + 1;
+}
+cout << i;
+return 0;
+}
+Funcdef  int
+Type  int
+int  int
+id  main
+(  (
+Parastate  int
+State  int
+Type  int
+int  int
+id  g
+A  )
+Init  )
+Stateclo  )
+)  )
+{  {
+Funcblock  int
+Staclo  int
+Statement  int
+State  int
+Type  int
+int  int
+id  a
+A  =
+Init  =
+=  =
+Rvalue  11
+Exp  11
+Divi  11
+Factor  11
+number  11
+A  ;
+Faccycle  ;
+Item  ;
+F  ;
+Staclo  ;
+;  ;
+Funcbloclo  int
+Staclo  int
+Statement  int
+State  int
+Type  int
+int  int
+id  d
+A  =
+Init  =
+=  =
+Rvalue  2
+Exp  2
+Divi  2
+Factor  2
+number  2
+A  ;
+Faccycle  ;
+Item  ;
+F  ;
+Staclo  ;
+;  ;
+Funcbloclo  int
+Staclo  int
+Statement  int
+State  int
+Type  int
+int  int
+id  i
+A  =
+Init  =
+=  =
+Rvalue  1
+Exp  1
+Divi  1
+Factor  1
+number  1
+A  ;
+Faccycle  ;
+Item  ;
+F  ;
+Staclo  ;
+;  ;
+Funcbloclo  int
+Staclo  int
+Statement  int
+State  int
+Type  int
+int  int
+id  q
+A  ;
+Init  ;
+Staclo  ;
+;  ;
+Funcbloclo  float
+Staclo  float
+Statement  float
+State  float
+Type  float
+float  float
+id  r
+A  ;
+Init  ;
+Staclo  ;
+;  ;
+Funcbloclo  int
+Staclo  int
+Statement  int
+State  int
+Type  int
+int  int
+id  s
+A  ;
+Init  ;
+Staclo  ;
+;  ;
+Funcbloclo  int
+Staclo  int
+Statement  int
+State  int
+Type  int
+int  int
+id  lo
+A  ;
+Init  ;
+Staclo  ;
+;  ;
+Funcbloclo  string
+Staclo  string
+Statement  string
+State  string
+Type  string
+string  string
+id  sss
+A  =
+Init  =
+=  =
+Rvalue  compile
+Exp  compile
+Divi  compile
+Factor  compile
+str  compile
+A  ;
+Faccycle  ;
+Item  ;
+F  ;
+Staclo  ;
+;  ;
+Funcbloclo  struct
+Strustate  struct
+struct  struct
+id  buhao
+{  {
+Funcbloclo  int
+Staclo  int
+Statement  int
+State  int
+Type  int
+int  int
+id  aa
+A  ;
+Init  ;
+Staclo  ;
+;  ;
+Funcbloclo  char
+Staclo  char
+Statement  char
+State  char
+Type  char
+char  char
+id  cc
+A  ;
+Init  ;
+Staclo  ;
+;  ;
+Funcbloclo  }
+}  }
+;  ;
+Funcbloclo  int
+Staclo  int
+Statement  int
+State  int
+Type  int
+int  int
+id  dd
+A  [
+Init  [
+[  [
+number  10
+]  ]
+Staclo  ;
+;  ;
+Funcbloclo  char
+Staclo  char
+Statement  char
+State  char
+Type  char
+char  char
+id  y
+A  =
+Init  =
+=  =
+Rvalue  a
+Exp  a
+Divi  a
+Factor  a
+ch  a
+A  ;
+Faccycle  ;
+Item  ;
+F  ;
+Staclo  ;
+;  ;
+Funcbloclo  float
+Staclo  float
+Statement  float
+State  float
+Type  float
+float  float
+id  k
+A  =
+Init  =
+=  =
+Rvalue  1
+Exp  1
+Divi  1
+Factor  1
+number  1
+A  ;
+Faccycle  ;
+Item  ;
+F  ;
+Staclo  ;
+;  ;
+Funcbloclo  if
+Condistate  if
+if  if
+(  (
+Logicexp  a
+Exp  a
+Divi  a
+Factor  a
+id  a
+A  <=
+Faccycle  <=
+Item  <=
+Logicopera  <=
+<=  <=
+S  d
+Exp  d
+Divi  d
+Factor  d
+id  d
+A  )
+Faccycle  )
+Item  )
+T  )
+)  )
+G  {
+{  {
+Funcblock  r
+Staclo  r
+Statement  r
+State  r
+id  r
+A  =
+Init  =
+=  =
+Rvalue  a
+Exp  a
+Divi  a
+Factor  a
+id  a
+A  +
+Faccycle  +
+Item  +
++  +
+Divi  d
+Factor  d
+id  d
+A  ;
+Faccycle  ;
+D  ;
+Item  ;
+F  ;
+Staclo  ;
+;  ;
+Funcbloclo  lo
+Staclo  lo
+Statement  lo
+State  lo
+id  lo
+A  =
+Init  =
+=  =
+Rvalue  a
+Exp  a
+Divi  a
+Factor  a
+id  a
+A  /
+Faccycle  /
+/  /
+Factor  5
+number  5
+A  ;
+C  ;
+Faccycle  ;
+Item  ;
+F  ;
+Staclo  ;
+;  ;
+Funcbloclo  }
+}  }
+Nor  else
+else  else
+H  {
+{  {
+Funcblock  r
+Staclo  r
+Statement  r
+State  r
+id  r
+A  =
+Init  =
+=  =
+Rvalue  a
+Exp  a
+Divi  a
+Factor  a
+id  a
+A  +
+Faccycle  +
+Item  +
++  +
+Divi  a
+Factor  a
+id  a
+A  *
+Faccycle  *
+*  *
+Factor  d
+id  d
+A  ;
+B  ;
+Faccycle  ;
+D  ;
+Item  ;
+F  ;
+Staclo  ;
+;  ;
+Funcbloclo  lo
+Staclo  lo
+Statement  lo
+State  lo
+id  lo
+A  =
+Init  =
+=  =
+Rvalue  a
+Exp  a
+Divi  a
+Factor  a
+id  a
+A  *
+Faccycle  *
+*  *
+Factor  d
+id  d
+A  ;
+B  ;
+Faccycle  ;
+Item  ;
+F  ;
+Staclo  ;
+;  ;
+Funcbloclo  }
+}  }
+I  cout
+Funcbloclo  cout
+Coutstate  cout
+cout  cout
+<<  <<
+id  r
+M  ;
+;  ;
+Funcbloclo  cin
+Cinstate  cin
+cin  cin
+>>  >>
+id  i
+N  ;
+;  ;
+Funcbloclo  while
+Whilecycle  while
+while  while
+J  (
+(  (
+Logicexp  i
+Exp  i
+Divi  i
+Factor  i
+id  i
+A  <
+Faccycle  <
+Item  <
+Logicopera  <
+<  <
+P  10
+Exp  10
+Divi  10
+Factor  10
+number  10
+A  )
+Faccycle  )
+Item  )
+T  )
+)  )
+K  {
+{  {
+Funcblock  i
+Staclo  i
+Statement  i
+State  i
+id  i
+A  =
+Init  =
+=  =
+Rvalue  i
+Exp  i
+Divi  i
+Factor  i
+id  i
+A  +
+Faccycle  +
+Item  +
++  +
+Divi  1
+Factor  1
+number  1
+A  ;
+Faccycle  ;
+D  ;
+Item  ;
+F  ;
+Staclo  ;
+;  ;
+Funcbloclo  }
+}  }
+L  cout
+Funcbloclo  cout
+Coutstate  cout
+cout  cout
+<<  <<
+id  i
+M  ;
+;  ;
+Funcbloclo  return
+Funcend  return
+return  return
+Factor  0
+number  0
+A  ;
+;  ;
+Funcbloclo  }
+}  }
+=         11        _         a         
+=         2         _         d         
+=         1         _         i         
+=         compile   _         sss       
+=         a         _         y         
+=         1         _         k         
+<=        a         d         t0        
+if        t0        _         _         
++         a         d         t1        
+=         t1        _         r         
+/         a         5         t2        
+=         t2        _         lo        
+else      _         _         _         
+*         a         d         t3        
++         a         t3        t4        
+=         t4        _         r         
+*         a         d         t5        
+=         t5        _         lo        
+end       _         _         _         
+cout      _         _         r         
+cin       _         _         i         
+while     _         _         _         
+<         i         10        t6        
+do        t6        _         _         
++         i         1         t7        
+=         t7        _         i         
+end       _         _         _         
+cout      _         _         i         
+
+
+
+cin       _         _         i         
+=         11        _         a         
+=         2         _         d         
+<=        a         d         t0        
+if        t0        _         _         
++         a         d         r         
+/         a         5         lo        
+else      _         _         _         
+*         a         d         t3        
++         a         t3        r         
+*         a         d         lo        
+end       _         _         _         
+while     _         _         _         
+<         i         10        t6        
+do        t6        _         _         
++         i         1         i         
+end       _         _         _         
+cout      _         _         r         
+cout      _         _         i         
+
+符号表如下
+name      type      cat       address   
+main      int       f         0  f
+g         int       v         4  v
+a         int       v         6  v
+d         int       v         7  v
+i         int       v         8  v
+q         int       v         9  v
+r         float     v         10 v
+s         int       v         11 v
+lo        int       v         12 v
+sss       string    v         13 v
+buhao     t0        d         0  l
+aa        int       v         14 v
+cc        char      v         15 v
+dd        t1        d         1  l
+y         char      v         17 v
+k         float     v         18 v
+------------------------------------------
+--------------Target Code-----------------
+------------------------------------------
+DSEG    SEGMENT  
+i       DW 0
+a       DW 0
+d       DW 0
+t0      DB 0
+r       DW 0
+lo      DW 0
+t3      DW 0
+t6      DB 0
+string  DB 'PLEASE INPUT:','$'
+DSEG    ENDS
+SSEG    SEGMENT STACK
+SSEG    ENDS
+CSEG    SEGMENT
+        ASSUME  CS:CSEG,DS:DSEG
+        ASSUME  SS:SSEG
+MAIN:
+        MOV AX,DSEG
+        MOV DS,AX
+        MOV AX,SSEG
+        MOV SS,AX
+        MOV DX,OFFSET string
+        MOV AH,09H
+        INT 21H
+        MOV AH,01
+        INT 21H
+        SUB AL,30H
+        AND AX,00FFH
+        MOV i,AX
+        MOV DL,0AH
+        MOV AH,02H
+        INT 21H
+        MOV DL,0DH
+        INT 21H
+        MOV a,11
+        MOV d,2
+compare0:   
+        MOV AX,a
+        MOV BX,d
+        CMP AX,BX
+        JAE else0
+if0:
+        MOV AX,a
+        ADD AX,d
+        MOV r,AX
+        MOV AX,5
+        MOV SI,OFFSET a
+        DIV BYTE PTR [SI]
+        AND AH,00H
+        MOV lo,AX
+        JMP ifend0
+else0:
+        MOV SI,OFFSET a
+        MOV AL,BYTE PTR [SI]
+        MOV SI,OFFSET a
+        MUL BYTE PTR [SI]
+        MOV t3,AX
+        MOV AX,a
+        ADD AX,t3
+        MOV r,AX
+        MOV SI,OFFSET a
+        MOV AL,BYTE PTR [SI]
+        MOV SI,OFFSET a
+        MUL BYTE PTR [SI]
+        MOV lo,AX
+ifend0:
+compare1:   
+        MOV AX,i
+        MOV BX,10
+        CMP AX,BX
+        JA whileend0
+do0:
+        MOV AX,i
+        ADD AX,1
+        MOV i,AX
+        JMP compare1
+whileend0:
+        MOV CL,16
+cout0:
+        SUB CL,04
+        MOV AX,r
+        SHR AX,CL
+        AND AX,000FH
+        MOV DL,AL
+        CMP DL,10
+        JB  couth0
+        ADD DL,07H
+couth0:
+        ADD DL,30H
+        MOV AH,02H
+        INT 21H
+        CMP CL,0
+        JNE cout0
+        MOV DL,'H'
+        MOV AH,02H
+        INT 21H
+        MOV DL,0AH
+        MOV AH,02H
+        INT 21H
+        MOV DL,0DH
+        INT 21H
+        MOV CL,16
+cout1:
+        SUB CL,04
+        MOV AX,i
+        SHR AX,CL
+        AND AX,000FH
+        MOV DL,AL
+        CMP DL,10
+        JB  couth1
+        ADD DL,07H
+couth1:
+        ADD DL,30H
+        MOV AH,02H
+        INT 21H
+        CMP CL,0
+        JNE cout1
+        MOV DL,'H'
+        MOV AH,02H
+        INT 21H
+        MOV DL,0AH
+        MOV AH,02H
+        INT 21H
+        MOV DL,0DH
+        INT 21H
+        MOV AH,4CH
+        INT 21H
+CSEG    ENDS
+        END MAIN

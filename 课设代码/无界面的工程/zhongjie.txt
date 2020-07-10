@@ -1,0 +1,1 @@
+id ( ) { } int float char void number ch * / + - = , ; string while > < == >= <= if else return << >> cout cin [ ] str struct
